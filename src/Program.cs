@@ -1,7 +1,13 @@
-using System.IO.Abstractions;
+﻿using System.IO.Abstractions;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
+using Kuzaine;
+using Kuzaine.Commands;
+using Kuzaine.Exceptions;
+using Kuzaine.Helpers;
+using Kuzaine.Interceptors;
+using Kuzaine.Services;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using Spectre.Console;
@@ -24,15 +30,17 @@ var app = new CommandApp(registrar);
 if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
 {
     ///<summary>
-    /// this makes emoji support more feasible. might get built into spectre better in the future, so give a go deleting this at some point
+    /// this makes emojis come up more reliably. might get built into spectre better in the future, so give a go deleting this at some point
     /// they seem to show up fine on osx and actually need this to be off to work there
-    ///</summary>
+    ///
+    ///  
+    /// </summary>
     Console.OutputEncoding = Encoding.Unicode;
 }
 
 app.Configure(config =>
 {
-    config.SetApplicationName("craftsman");
+    config.SetApplicationName("Kuzaine");
     config.SetInterceptor(new OperatingSystemInterceptor());
 
     config.AddBranch("new", @new =>
@@ -165,14 +173,14 @@ catch (Exception e)
             Format = ExceptionFormats.ShortenEverything | ExceptionFormats.ShowLinks,
             Style = new ExceptionStyle
             {
-                Exception = new Style().Foreground(Color.Yellow),
-                Message = new Style().Foreground(Color.Green),
+                Exception = new Style().Foreground(Color.Grey),
+                Message = new Style().Foreground(Color.White),
                 NonEmphasized = new Style().Foreground(Color.Cornsilk1),
                 Parenthesis = new Style().Foreground(Color.Cornsilk1),
-                Method = new Style().Foreground(Color.Purple),
+                Method = new Style().Foreground(Color.Red),
                 ParameterName = new Style().Foreground(Color.Cornsilk1),
-                ParameterType = new Style().Foreground(Color.Purple),
-                Path = new Style().Foreground(Color.Purple),
+                ParameterType = new Style().Foreground(Color.Red),
+                Path = new Style().Foreground(Color.Red),
                 LineNumber = new Style().Foreground(Color.Cornsilk1),
             }
         });
@@ -182,3 +190,4 @@ finally
 {
     VersionChecker.CheckForLatestVersion();
 }
+
