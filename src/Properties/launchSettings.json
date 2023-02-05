@@ -1,0 +1,17 @@
+{
+  "profiles": {
+    "Craftsman Dev": {
+      "commandName": "Project",
+      "commandLineArgs": "next entity C:\\Users\\WALE\\Kuzaine\\Kuzaine.yaml",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Dev"
+      }
+    },
+    "Craftsman": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Prod"
+      }
+    }
+  }
+}
