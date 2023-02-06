@@ -1,9 +1,13 @@
-﻿namespace Kuzaine.Tests.FileTextTests
-{
-    using Kuzaine.Builders;
-    using Kuzaine.Tests.Fakes;
-    using FluentAssertions;
-    using Xunit;
+using Kuzaine.Builders;
+using Kuzaine.Tests.Fakes;
+using FluentAssertions;
+using Xunit;
+
+
+
+namespace Kuzaine.Tests.FileTextTests;
+
+   
 
     public class ProfileFileTextTests
     {
@@ -39,4 +43,4 @@
             fileText.Should().Be(expectedText);
         }
     }
-}
+
