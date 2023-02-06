@@ -1,8 +1,11 @@
-﻿namespace Kuzaine.Tests.FileTextTests
-{
-    using Kuzaine.Builders;
-    using FluentAssertions;
-    using Xunit;
+using Kuzaine.Builders;
+using FluentAssertions;
+using Xunit;
+
+
+namespace Kuzaine.Tests.FileTextTests;
+
+   
 
     public class StartupFileTextTests
     {
@@ -156,4 +159,4 @@
             fileText.Should().Be(expectedText);
         }
     }
-}
+
