@@ -1,13 +1,11 @@
-﻿using System;
+﻿namespace Kuzaine.Builders;
+
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Abstractions;
 using Domain;
 using Services;
-
-
-
-namespace Kuzaine.Builders;
 
 public class EntityModifier
 {

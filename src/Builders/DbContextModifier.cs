@@ -1,13 +1,11 @@
-﻿using System;
+﻿namespace Kuzaine.Builders;
+
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Abstractions;
 using Domain;
 using Services;
-
-
-
-namespace Kuzaine.Builders;
 
 public class DbContextModifier
 {
@@ -18,8 +16,7 @@ public class DbContextModifier
         _fileSystem = fileSystem;
     }
 
-    public void AddDbSetAndConfig(string solutionDirectory, List<Entity> entities, 
-             string dbContextName, string projectBaseName)
+    public void AddDbSetAndConfig(string solutionDirectory, List<Entity> entities, string dbContextName, string projectBaseName)
     {
         var classPath = ClassPathHelper.DbContextClassPath(solutionDirectory, $"{dbContextName}.cs", projectBaseName);
         var entitiesUsings = "";

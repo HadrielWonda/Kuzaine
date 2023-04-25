@@ -1,11 +1,9 @@
-﻿using Domain;
+﻿namespace Kuzaine.Builders;
+
+using Domain;
 using Domain.Enums;
 using Helpers;
 using Services;
-
-
-
-namespace Kuzaine.Builders;
 
 public class ProducerRegistrationBuilder
 {

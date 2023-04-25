@@ -1,13 +1,11 @@
-﻿using System;
+﻿namespace Kuzaine.Builders;
+
+using System;
 using System.Collections.Generic;
 using Domain;
 using Domain.Enums;
 using Helpers;
 using Services;
-
-
-
-namespace Kuzaine.Builders;
 
 public class EntityBuilder
 {
@@ -34,8 +32,8 @@ public class EntityBuilder
 
     public static string GetEntityFileText(string classNamespace, string solutionDirectory, string srcDirectory, Entity entity, string projectBaseName)
     {
-        var creationDtoName = FileNames.GetDtoName(entity.Name, Dto.Creation);
-        var updateDtoName = FileNames.GetDtoName(entity.Name, Dto.Update);
+        var creationClassName = EntityModel.Creation.GetClassName(entity.Name);
+        var updateClassName = EntityModel.Update.GetClassName(entity.Name);
         var propString = EntityPropBuilder(entity.Properties, entity.Name);
         var usingSieve = entity.Properties.Where(e => e.CanFilter || e.CanSort).ToList().Count > 0 ? @$"{Environment.NewLine}using Sieve.Attributes;" : "";
         var tableAnnotation = EntityAnnotationBuilder(entity);
@@ -53,19 +51,19 @@ using {classPath.ClassNamespace};";
         }
         
         var exceptionClassPath = ClassPathHelper.ExceptionsClassPath(srcDirectory, "");
-        var dtoClassPath = ClassPathHelper.DtoClassPath(srcDirectory, $"", entity.Plural, projectBaseName);
+        var modelClassPath = ClassPathHelper.EntityModelClassPath(srcDirectory, entity.Name, entity.Plural, null, projectBaseName);
         var domainEventsClassPath = ClassPathHelper.DomainEventsClassPath(srcDirectory, "", entity.Plural, projectBaseName);
 
         var createEntityVar = $"new{entity.Name.UppercaseFirstLetter()}";
         var createPropsAssignment = string.Join($"{Environment.NewLine}", entity.Properties.Where(x => x.IsPrimitiveType).Select(property =>
-            $"        {createEntityVar}.{property.Name} = {creationDtoName.LowercaseFirstLetter()}.{property.Name};"));
+            $"        {createEntityVar}.{property.Name} = {creationClassName.LowercaseFirstLetter()}.{property.Name};"));
         var updatePropsAssignment = string.Join($"{Environment.NewLine}", entity.Properties.Where(x => x.IsPrimitiveType).Select(property =>
-            $"        {property.Name} = {updateDtoName.LowercaseFirstLetter()}.{property.Name};"));
+            $"        {property.Name} = {updateClassName.LowercaseFirstLetter()}.{property.Name};"));
         
         return @$"namespace {classNamespace};
 
 using {exceptionClassPath.ClassNamespace};
-using {dtoClassPath.ClassNamespace};
+using {modelClassPath.ClassNamespace};
 using {domainEventsClassPath.ClassNamespace};
 using FluentValidation;
 using System.Text.Json.Serialization;
@@ -79,7 +77,7 @@ public class {entity.Name} : BaseEntity
 {propString}
 
 
-    public static {entity.Name} Create({creationDtoName} {creationDtoName.LowercaseFirstLetter()})
+    public static {entity.Name} Create({creationClassName} {creationClassName.LowercaseFirstLetter()})
     {{
         var {createEntityVar} = new {entity.Name}();
 
@@ -90,7 +88,7 @@ public class {entity.Name} : BaseEntity
         return {createEntityVar};
     }}
 
-    public {entity.Name} Update({updateDtoName} {updateDtoName.LowercaseFirstLetter()})
+    public {entity.Name} Update({updateClassName} {updateClassName.LowercaseFirstLetter()})
     {{
 {updatePropsAssignment}
 
@@ -128,19 +126,19 @@ public abstract class BaseEntity
 {{
     [Key]
     [Sieve(CanFilter = true, CanSort = true)]
-    public virtual Guid Id {{ get; private set; }} = Guid.NewGuid();
+    public Guid Id {{ get; private set; }} = Guid.NewGuid();
     
     [Sieve(CanFilter = true, CanSort = true)]
-    public virtual DateTime CreatedOn {{ get; private set; }}
+    public DateTime CreatedOn {{ get; private set; }}
     
     [Sieve(CanFilter = true, CanSort = true)]
-    public virtual string CreatedBy {{ get; private set; }}
+    public string CreatedBy {{ get; private set; }}
     
     [Sieve(CanFilter = true, CanSort = true)]
-    public virtual DateTime? LastModifiedOn {{ get; private set; }}
+    public DateTime? LastModifiedOn {{ get; private set; }}
     
     [Sieve(CanFilter = true, CanSort = true)]
-    public virtual string LastModifiedBy {{ get; private set; }}{isDeletedProp}
+    public string LastModifiedBy {{ get; private set; }}{isDeletedProp}
     
     [NotMapped]
     public List<DomainEvent> DomainEvents {{ get; }} = new List<DomainEvent>();
@@ -185,7 +183,7 @@ public abstract class BaseEntity
             if (property.IsSmartEnum())
             {
                 propString += $@"    private {property.SmartEnumPropName} _{property.Name.LowercaseFirstLetter()};
-{attributes}    public virtual string {property.Name}
+{attributes}    public string {property.Name}
     {{
         get => _{property.Name.LowercaseFirstLetter()}.Name;
         private set
@@ -208,7 +206,7 @@ public abstract class BaseEntity
                     : $"{Environment.NewLine}{Environment.NewLine}";
 
                 if (property.IsPrimitiveType || property.IsMany)
-                    propString += $@"    public virtual {property.Type} {property.Name} {{ get; private set; }}{defaultValue}{newLine}";
+                    propString += $@"    public {property.Type} {property.Name} {{ get; private set; }}{defaultValue}{newLine}";
 
                 propString += GetForeignProp(property, entityName);
             }
@@ -278,7 +276,7 @@ public abstract class BaseEntity
         if (propName == entityName)
             propName = $"Parent{propName}";
         
-        return !string.IsNullOrEmpty(prop.ForeignEntityName) && !prop.IsMany ? $@"    public virtual {prop.ForeignEntityName} {propName} {{ get; private set; }}{Environment.NewLine}{Environment.NewLine}" : "";
+        return !string.IsNullOrEmpty(prop.ForeignEntityName) && !prop.IsMany ? $@"    public {prop.ForeignEntityName} {propName} {{ get; private set; }}{Environment.NewLine}{Environment.NewLine}" : "";
     }
 
     public void CreateUserEntity(string srcDirectory, Entity entity, string projectBaseName)
@@ -294,6 +292,7 @@ public abstract class BaseEntity
         var domainEventsClassPath = ClassPathHelper.DomainEventsClassPath(srcDirectory, "", entity.Plural, projectBaseName);
         var emailsClassPath = ClassPathHelper.EntityClassPath(srcDirectory, $"", "Emails", projectBaseName);
         var exceptionClassPath = ClassPathHelper.ExceptionsClassPath(srcDirectory, "");
+        var modelClassPath = ClassPathHelper.EntityModelClassPath(srcDirectory, "User", "Users", null, projectBaseName);
 
         return @$"namespace {classNamespace};
 
@@ -301,6 +300,7 @@ using {exceptionClassPath.ClassNamespace};
 using {dtoClassPath.ClassNamespace};
 using {domainEventsClassPath.ClassNamespace};
 using {emailsClassPath.ClassNamespace};
+using {modelClassPath.ClassNamespace};
 using Roles;
 using System.Text.Json.Serialization;
 using System.Runtime.Serialization;
@@ -309,53 +309,53 @@ using Sieve.Attributes;
 public class User : BaseEntity
 {{
     [Sieve(CanFilter = true, CanSort = true)]
-    public virtual string Identifier {{ get; private set; }}
+    public string Identifier {{ get; private set; }}
 
     [Sieve(CanFilter = true, CanSort = true)]
-    public virtual string FirstName {{ get; private set; }}
+    public string FirstName {{ get; private set; }}
 
     [Sieve(CanFilter = true, CanSort = true)]
-    public virtual string LastName {{ get; private set; }}
+    public string LastName {{ get; private set; }}
 
     [Sieve(CanFilter = true, CanSort = true)]
-    public virtual Email Email {{ get; private set; }}
+    public Email Email {{ get; private set; }}
 
     [Sieve(CanFilter = true, CanSort = true)]
-    public virtual string Username {{ get; private set; }}
+    public string Username {{ get; private set; }}
 
     [JsonIgnore]
     [IgnoreDataMember]
-    public virtual ICollection<UserRole> Roles {{ get; private set; }} = new List<UserRole>();
+    public ICollection<UserRole> Roles {{ get; private set; }} = new List<UserRole>();
 
 
-    public static User Create(UserForCreationDto userForCreationDto)
+    public static User Create(UserForCreation userForCreation)
     {{
-        ValidationException.ThrowWhenNullOrWhitespace(userForCreationDto.Identifier, 
+        ValidationException.ThrowWhenNullOrWhitespace(userForCreation.Identifier, 
             ""Please provide an identifier."");
 
         var newUser = new User();
 
-        newUser.Identifier = userForCreationDto.Identifier;
-        newUser.FirstName = userForCreationDto.FirstName;
-        newUser.LastName = userForCreationDto.LastName;
-        newUser.Email = new Email(userForCreationDto.Email);
-        newUser.Username = userForCreationDto.Username;
+        newUser.Identifier = userForCreation.Identifier;
+        newUser.FirstName = userForCreation.FirstName;
+        newUser.LastName = userForCreation.LastName;
+        newUser.Email = new Email(userForCreation.Email);
+        newUser.Username = userForCreation.Username;
 
         newUser.QueueDomainEvent(new UserCreated(){{ User = newUser }});
         
         return newUser;
     }}
 
-    public User Update(UserForUpdateDto userForUpdateDto)
+    public User Update(UserForUpdate userForUpdate)
     {{
-        ValidationException.ThrowWhenNullOrWhitespace(userForUpdateDto.Identifier, 
+        ValidationException.ThrowWhenNullOrWhitespace(userForUpdate.Identifier, 
             ""Please provide an identifier."");
 
-        Identifier = userForUpdateDto.Identifier;
-        FirstName = userForUpdateDto.FirstName;
-        LastName = userForUpdateDto.LastName;
-        Email = new Email(userForUpdateDto.Email);
-        Username = userForUpdateDto.Username;
+        Identifier = userForUpdate.Identifier;
+        FirstName = userForUpdate.FirstName;
+        LastName = userForUpdate.LastName;
+        Email = new Email(userForUpdate.Email);
+        Username = userForUpdate.Username;
 
         QueueDomainEvent(new UserUpdated(){{ Id = Id }});
         return this;
@@ -421,10 +421,10 @@ public class UserRole : BaseEntity
     [JsonIgnore]
     [IgnoreDataMember]
     [ForeignKey(""User"")]
-    public virtual Guid UserId {{ get; private set; }}
-    public virtual User User {{ get; private set; }}
+    public Guid UserId {{ get; private set; }}
+    public User User {{ get; private set; }}
 
-    public virtual Role Role {{ get; private set; }}
+    public Role Role {{ get; private set; }}
     
 
     public static UserRole Create(Guid userId, Role role)
@@ -448,13 +448,14 @@ public class UserRole : BaseEntity
     public void CreateRolePermissionsEntity(string srcDirectory, Entity entity, string projectBaseName)
     {
         var classPath = ClassPathHelper.EntityClassPath(srcDirectory, $"{entity.Name}.cs", entity.Plural, projectBaseName);
-        var fileText = GetRolePermissionsEntityFileText(classPath.ClassNamespace, srcDirectory);
+        var fileText = GetRolePermissionsEntityFileText(classPath.ClassNamespace, srcDirectory, projectBaseName);
         _utilities.CreateFile(classPath, fileText);
     }
 
-    public static string GetRolePermissionsEntityFileText(string classNamespace, string srcDirectory)
+    public static string GetRolePermissionsEntityFileText(string classNamespace, string srcDirectory, string projectBaseName)
     {
         var exceptionClassPath = ClassPathHelper.ExceptionsClassPath(srcDirectory, "");
+        var modelClassPath = ClassPathHelper.EntityModelClassPath(srcDirectory, "RolePermission", "RolePermissions", null, projectBaseName);
         return @$"namespace {classNamespace};
 
 using Dtos;
@@ -462,35 +463,36 @@ using DomainEvents;
 using Roles;
 using Domain;
 using {exceptionClassPath.ClassNamespace};
+using {modelClassPath.ClassNamespace};
 
 public class RolePermission : BaseEntity
 {{
-    public virtual Role Role {{ get; private set; }}
-    public virtual string Permission {{ get; private set; }}
+    public Role Role {{ get; private set; }}
+    public string Permission {{ get; private set; }}
 
 
-    public static RolePermission Create(RolePermissionForCreationDto rolePermissionForCreationDto)
+    public static RolePermission Create(RolePermissionForCreation rolePermissionForCreation)
     {{
-        ValidationException.Must(BeAnExistingPermission(rolePermissionForCreationDto.Permission), 
+        ValidationException.Must(BeAnExistingPermission(rolePermissionForCreation.Permission), 
             ""Please use a valid permission."");
 
         var newRolePermission = new RolePermission();
 
-        newRolePermission.Role = new Role(rolePermissionForCreationDto.Role);
-        newRolePermission.Permission = rolePermissionForCreationDto.Permission;
+        newRolePermission.Role = new Role(rolePermissionForCreation.Role);
+        newRolePermission.Permission = rolePermissionForCreation.Permission;
 
         newRolePermission.QueueDomainEvent(new RolePermissionCreated(){{ RolePermission = newRolePermission }});
         
         return newRolePermission;
     }}
 
-    public RolePermission Update(RolePermissionForUpdateDto rolePermissionForUpdateDto)
+    public RolePermission Update(RolePermissionForUpdate rolePermissionForUpdate)
     {{
-        ValidationException.Must(BeAnExistingPermission(rolePermissionForUpdateDto.Permission), 
+        ValidationException.Must(BeAnExistingPermission(rolePermissionForUpdate.Permission), 
             ""Please use a valid permission."");
 
-        Role = new Role(rolePermissionForUpdateDto.Role);
-        Permission = rolePermissionForUpdateDto.Permission;
+        Role = new Role(rolePermissionForUpdate.Role);
+        Permission = rolePermissionForUpdate.Permission;
 
         QueueDomainEvent(new RolePermissionUpdated(){{ Id = Id }});
         return this;

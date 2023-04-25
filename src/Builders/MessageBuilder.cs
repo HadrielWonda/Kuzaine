@@ -1,12 +1,10 @@
-﻿using System;
+﻿namespace Kuzaine.Builders;
+
+using System;
 using System.Collections.Generic;
 using Domain;
 using Helpers;
 using Services;
-
-
-
-namespace Kuzaine.Builders;
 
 public class MessageBuilder
 {

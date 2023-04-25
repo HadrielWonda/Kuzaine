@@ -1,9 +1,7 @@
-﻿using Helpers;
+﻿namespace Kuzaine.Builders;
+
+using Helpers;
 using Services;
-
-
-
-namespace Kuzaine.Builders;
 
 public class ProgramBuilder
 {
@@ -78,7 +76,7 @@ app.UseEndpoints(endpoints =>
     endpoints.MapControllers();
 }});
 
-app.UseSwaggerExtension();
+app.UseSwaggerExtension(builder.Configuration, builder.Environment);
 
 try
 {{

@@ -1,10 +1,8 @@
-﻿using System.IO;
+﻿namespace Kuzaine.Builders;
+
+using System.IO;
 using System.IO.Abstractions;
 using Services;
-
-
-
-namespace Kuzaine.Builders;
 
 public class InfrastructureServiceRegistrationModifier
 {
@@ -30,13 +28,14 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using HeimGuard;
 using {servicesClassPath.ClassNamespace};";
         var authServices = $@"
+        var authOptions = configuration.GetAuthOptions();
         if (!env.IsEnvironment(Consts.Testing.FunctionalTestingEnvName))
         {{
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
                 {{
-                    options.Authority = EnvironmentService.Authority;
-                    options.Audience = EnvironmentService.Audience;
+                    options.Authority = authOptions.Authority;
+                    options.Audience = authOptions.Audience;
                     options.RequireHttpsMetadata = !env.IsDevelopment();
                 }});
         }}

@@ -1,13 +1,13 @@
-﻿namespace Craftsman.Builders;
+﻿namespace Kuzaine.Builders;
 
 using Helpers;
 using Services;
 
 public class ReadmeBuilder
 {
-    private readonly ICraftsmanUtilities _utilities;
+    private readonly IKuzaineUtilities _utilities;
 
-    public ReadmeBuilder(ICraftsmanUtilities utilities)
+    public ReadmeBuilder(IKuzaineUtilities utilities)
     {
         _utilities = utilities;
     }
@@ -23,7 +23,7 @@ public class ReadmeBuilder
     {
         return @$"# {domainName}
 
-This project was created as [Kuzaine](https://github.com/hadrielwonda/kuzaine).
+This project was created with [Kuzaine](https://github.com/pdevito3/Kuzaine).
 
 ## Getting Started
 1. Run `docker-compose up --build` from your `.sln` directory to spin up your database(s) and other supporting 

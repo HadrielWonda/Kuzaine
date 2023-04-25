@@ -1,10 +1,8 @@
-﻿using Helpers;
+﻿namespace Kuzaine.Builders;
+
+using Helpers;
 using MediatR;
 using Services;
-
-
-
-namespace Kuzaine.Builders;
 
 public static class ValueObjectBuilder
 {
@@ -41,7 +39,7 @@ public static class ValueObjectBuilder
 	using System.Linq;
 	using System.Reflection;
 
-    // source: https://github.com/jhewlett/ValueObject 
+    // source: https://github.com/jhewlett/ValueObject
     public abstract class ValueObject : IEquatable<ValueObject>
     {{
         private List<PropertyInfo>? _properties;

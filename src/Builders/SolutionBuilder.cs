@@ -1,4 +1,6 @@
-﻿using System.IO;
+﻿namespace Kuzaine.Builders;
+
+using System.IO;
 using System.IO.Abstractions;
 using Domain;
 using Dtos;
@@ -7,10 +9,6 @@ using Helpers;
 using MediatR;
 using Projects;
 using Services;
-
-
-
-namespace Kuzaine.Builders;
 
 public class SolutionBuilder
 {

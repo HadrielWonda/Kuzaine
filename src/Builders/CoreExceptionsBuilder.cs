@@ -1,11 +1,9 @@
-﻿using System.IO.Abstractions;
+﻿namespace Kuzaine.Builders;
+
+using System.IO.Abstractions;
 using Helpers;
 using MediatR;
 using Services;
-
-
-
-namespace Kuzaine.Builders;
 
 public static class CoreExceptionBuilder
 {

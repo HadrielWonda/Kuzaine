@@ -1,4 +1,6 @@
-﻿using System;
+﻿namespace Kuzaine.Builders;
+
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -7,10 +9,6 @@ using System.Linq;
 using Domain;
 using Helpers;
 using Services;
-
-
-
-namespace Kuzaine.Builders;
 
 public class DbContextBuilder
 {
@@ -41,9 +39,7 @@ public class DbContextBuilder
         RegisterContext(srcDirectory, dbProvider, dbContextName, dbName, localDbConnection, namingConventionEnum, projectBaseName);
     }
 
-    public static string GetContextFileText(string classNamespace, List<Entity> entities, 
-            string dbContextName, string srcDirectory, 
-            bool useSoftDelete, string projectBaseName)
+    public static string GetContextFileText(string classNamespace, List<Entity> entities, string dbContextName, string srcDirectory, bool useSoftDelete, string projectBaseName)
     {
         var servicesClassPath = ClassPathHelper.WebApiServicesClassPath(srcDirectory, "", projectBaseName);
         var baseEntityClassPath = ClassPathHelper.EntityClassPath(srcDirectory, $"", "", projectBaseName);
@@ -75,6 +71,7 @@ public class DbContextBuilder
 using {baseEntityClassPath.ClassNamespace};
 using {entityConfigClassPath.ClassNamespace};
 using {servicesClassPath.ClassNamespace};
+using Configurations;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
@@ -187,10 +184,7 @@ public sealed class {dbContextName} : DbContext
 }}";
     }
 
-    private void RegisterContext(string srcDirectory, DbProvider dbProvider, 
-          string dbContextName, string dbName, 
-          string localDbConnection, NamingConventionEnum namingConventionEnum, 
-          string projectBaseName)
+    private void RegisterContext(string srcDirectory, DbProvider dbProvider, string dbContextName, string dbName, string localDbConnection, NamingConventionEnum namingConventionEnum, string projectBaseName)
     {
         var classPath = ClassPathHelper.WebApiServiceExtensionsClassPath(srcDirectory, $"{FileNames.GetInfraRegistrationName()}.cs", projectBaseName);
 
@@ -199,8 +193,6 @@ public sealed class {dbContextName} : DbContext
 
         if (!_fileSystem.File.Exists(classPath.FullClassPath))
             throw new FileNotFoundException($"The `{classPath.FullClassPath}` file could not be found.");
-
-        var usingDbStatement = GetDbUsingStatement(dbProvider);
         InstallDbProviderNugetPackages(dbProvider, srcDirectory);
 
         //TODO test for class and another for anything else
@@ -221,17 +213,17 @@ public sealed class {dbContextName} : DbContext
                     if (line.Contains("// DbContext -- Do Not Delete")) // abstract this to a constants file?
                     {
                         newText += @$"
-        var connectionString = EnvironmentService.DbConnectionString;
+        var connectionString = configuration.GetConnectionStringOptions().{projectBaseName};
         if(string.IsNullOrWhiteSpace(connectionString))
         {{
             // this makes local migrations easier to manage. feel free to refactor if desired.
             connectionString = env.IsDevelopment() 
                 ? ""{localDbConnection}""
-                : throw new Exception(""DB_CONNECTION_STRING environment variable is not set."");
+                : throw new Exception(""The database connection string is not set."");
         }}
 
         services.AddDbContext<{dbContextName}>(options =>
-            options.{usingDbStatement}(connectionString,
+            options.{dbProvider.DbRegistrationStatement()}(connectionString,
                 builder => builder.MigrationsAssembly(typeof({dbContextName}).Assembly.FullName)){namingConvention});
 
         services.AddHostedService<MigrationHostedService<{dbContextName}>>();";
@@ -272,15 +264,5 @@ public sealed class {dbContextName} : DbContext
 
         process.Start();
         process.WaitForExit();
-    }
-
-    private static object GetDbUsingStatement(DbProvider provider)
-    {
-        if (DbProvider.Postgres == provider)
-            return "UseNpgsql";
-        //else if (Enum.GetName(typeof(DbProvider), DbProvider.MySql) == provider)
-        //    return "UseMySql";
-
-        return "UseSqlServer";
     }
 }

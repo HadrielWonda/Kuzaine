@@ -1,11 +1,9 @@
-﻿using System;
+﻿namespace Kuzaine.Builders;
+
+using System;
 using System.IO;
 using System.IO.Abstractions;
 using Services;
-
-
-
-namespace Kuzaine.Builders;
 
 public class MassTransitModifier
 {

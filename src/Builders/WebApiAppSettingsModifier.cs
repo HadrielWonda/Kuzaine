@@ -1,13 +1,11 @@
-﻿using System.Collections.Generic;
+﻿namespace Kuzaine.Builders;
+
+using System.Collections.Generic;
 using System.IO;
 using System.IO.Abstractions;
 using System.Linq;
 using Domain;
 using Services;
-
-
-
-namespace Kuzaine.Builders;
 
 public class WebApiAppSettingsModifier
 {

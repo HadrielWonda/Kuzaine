@@ -1,10 +1,8 @@
-﻿using System.IO.Abstractions;
+﻿namespace Kuzaine.Builders;
+
+using System.IO.Abstractions;
 using System.Text;
 using Exceptions;
-
-
-
-namespace Kuzaine.Builders;
 
 public class GitBuilder
 {

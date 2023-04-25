@@ -1,11 +1,9 @@
-﻿using Domain;
+﻿namespace Kuzaine.Builders;
+
+using Domain;
 using Helpers;
 using MediatR;
 using Services;
-
-
-
-namespace Kuzaine.Builders;
 
 public static class DatabaseEntityConfigUserRoleBuilder
 {

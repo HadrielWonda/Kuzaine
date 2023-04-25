@@ -1,10 +1,8 @@
-﻿using Helpers;
+﻿namespace Kuzaine.Builders;
+
+using Helpers;
 using MediatR;
 using Services;
-
-
-
-namespace Kuzaine.Builders;
 
 public static class UserEntityRepositoryBuilder
 {

@@ -1,9 +1,7 @@
-﻿using Helpers;
+﻿namespace Kuzaine.Builders;
+
+using Helpers;
 using Services;
-
-
-
-namespace Kuzaine.Builders;
 
 public class CurrentUserServiceBuilder
 {
