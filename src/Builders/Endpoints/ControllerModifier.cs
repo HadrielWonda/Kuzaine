@@ -1,13 +1,11 @@
-﻿using System;
+﻿namespace Kuzaine.Builders.Endpoints;
+
+using System;
 using System.IO;
 using System.IO.Abstractions;
 using Domain;
 using Domain.Enums;
 using Services;
-
-
-
-namespace Kuzaine.Builders.Endpoints;
 
 public class ControllerModifier
 {
@@ -54,10 +52,6 @@ public class ControllerModifier
                             endpoint = PutRecordEndpointBuilder.GetEndpointTextForPutRecord(entity, addSwaggerComments, feature);
                         // else if (featureType == FeatureType.PatchRecord)
                         //     endpoint = PatchRecordEndpointBuilder.GetEndpointTextForPatchRecord(entity, addSwaggerComments, feature);
-                        ///<summary> 
-                        /// 
-                        /// to be worked on as I get more familiar with HTTPPATCH
-                        /// <summary/>
 
                         newText = $"{endpoint}{Environment.NewLine}{Environment.NewLine}{newText}";
                     }

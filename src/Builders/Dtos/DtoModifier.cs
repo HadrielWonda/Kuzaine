@@ -1,14 +1,12 @@
-﻿using System;
+namespace Kuzaine.Builders.Dtos;
+
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Abstractions;
 using Domain;
 using Domain.Enums;
 using Services;
-
-
-
-namespace Kuzaine.Builders.Dtos;
 
 public class DtoModifier
 {
@@ -22,7 +20,8 @@ public class DtoModifier
     public void AddPropertiesToDtos(string solutionDirectory, string entityName, List<EntityProperty> props, string projectBaseName)
     {
         UpdateDtoFile(solutionDirectory, entityName, props, Dto.Read, projectBaseName);
-        UpdateDtoFile(solutionDirectory, entityName, props, Dto.Manipulation, projectBaseName);
+        UpdateDtoFile(solutionDirectory, entityName, props, Dto.Creation, projectBaseName);
+        UpdateDtoFile(solutionDirectory, entityName, props, Dto.Update, projectBaseName);
     }
 
     private void UpdateDtoFile(string solutionDirectory, string entityName, List<EntityProperty> props, Dto dto, string projectBaseName)

@@ -1,12 +1,10 @@
-﻿using Helpers;
+﻿namespace Kuzaine.Builders.Bff.Components.Headers;
+
+using Helpers;
 using Services;
 
-
-
-namespace Kuzaine.Builders.Bff.Components.Headers;
-
- public class HeadersComponentBuilder
- {
+public class HeadersComponentBuilder
+{
     private readonly IKuzaineUtilities _utilities;
 
     public HeadersComponentBuilder(IKuzaineUtilities utilities)
@@ -33,12 +31,12 @@ namespace Kuzaine.Builders.Bff.Components.Headers;
     public static string GetPrivateHeaderText()
     {
         return @$"import {{ Menu, Transition }} from '@headlessui/react';
- import clsx from 'clsx';
- import React, {{ Fragment }} from 'react';
- import Avatar from 'react-avatar';
- import {{ useAuthUser }} from '@/features/Auth';
+import clsx from 'clsx';
+import React, {{ Fragment }} from 'react';
+import Avatar from 'react-avatar';
+import {{ useAuthUser }} from '@/features/Auth';
 
- function PrivateHeader() {{
+function PrivateHeader() {{
 	const {{ username, logoutUrl }} = useAuthUser();
 
 	return (
@@ -87,8 +85,8 @@ namespace Kuzaine.Builders.Bff.Components.Headers;
 			</div>
 		</nav>
 	);
- }}
+}}
 
- export {{ PrivateHeader }};";
+export {{ PrivateHeader }};";
     }
- }
+}

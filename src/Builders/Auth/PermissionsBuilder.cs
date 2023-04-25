@@ -1,8 +1,7 @@
-﻿using Helpers;
+﻿namespace Kuzaine.Builders.Auth;
+
+using Helpers;
 using Services;
-
-namespace Kuzaine.Builders.Auth;
-
 
 public class PermissionsBuilder
 {

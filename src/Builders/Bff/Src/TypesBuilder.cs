@@ -1,8 +1,7 @@
-﻿using Helpers;
+﻿namespace Kuzaine.Builders.Bff.Src;
+
+using Helpers;
 using Services;
-
-
-namespace Kuzaine.Builders.Bff.Src;
 
 public class TypesBuilder
 {

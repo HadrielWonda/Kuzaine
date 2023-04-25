@@ -1,8 +1,7 @@
+namespace Kuzaine.Builders.Docker;
+
 using Helpers;
 using Services;
-
-
-namespace Kuzaine.Builders.Docker;
 
 public class WebApiDockerfileBuilder
 {
@@ -63,8 +62,6 @@ also add an `80` port in `ports` in docker-compose.yaml like
 ```
 
 Then take off httpsredirect in startup
-
-Open to help on this
 
 
          */

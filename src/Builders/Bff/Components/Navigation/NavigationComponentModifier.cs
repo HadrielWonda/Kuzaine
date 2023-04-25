@@ -1,10 +1,9 @@
-﻿using System;
+﻿namespace Kuzaine.Builders.Bff.Components.Navigation;
+
+using System;
 using System.IO.Abstractions;
 using Helpers;
 using Services;
-
-
-namespace Kuzaine.Builders.Bff.Components.Navigation;
 
 public class NavigationComponentModifier
 {
@@ -43,7 +42,7 @@ public class NavigationComponentModifier
             }
         }
 
-        //1. Delete the old file and set the name of the new one to the original name
+        // delete the old file and set the name of the new one to the original name
         _fileSystem.File.Delete(classPath.FullClassPath);
         _fileSystem.File.Move(tempPath, classPath.FullClassPath);
     }

@@ -1,8 +1,7 @@
+namespace Kuzaine.Builders.Docker;
+
 using Helpers;
 using Services;
-
-
-namespace Kuzaine.Builders.Docker;
 
 public class BffDockerfileBuilder
 {

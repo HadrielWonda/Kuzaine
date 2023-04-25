@@ -1,10 +1,8 @@
-﻿using System;
+﻿namespace Kuzaine.Builders.Endpoints;
+
+using System;
 using Helpers;
 using Services;
-
-
-
-namespace Kuzaine.Builders.Endpoints;
 
 public class RolesControllerBuilder
 {

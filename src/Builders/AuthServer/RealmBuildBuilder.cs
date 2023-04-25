@@ -1,10 +1,9 @@
+namespace Kuzaine.Builders.AuthServer;
+
 using Kuzaine.Helpers;
 using Kuzaine.Services;
 using Domain;
 using Domain.Enums;
-
-
-namespace Kuzaine.Builders.AuthServer;
 
 public class RealmBuildBuilder
 {

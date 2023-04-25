@@ -1,14 +1,13 @@
-﻿using Kuzaine.Helpers;
-using Kuzaine.Services;
+﻿namespace Kuzaine.Builders.Bff;
 
-
-namespace Kuzaine.Builders.Bff;
+using Helpers;
+using Services;
 
 public class AspnetcoreHttpsBuilder
 {
-    private readonly ICraftsmanUtilities _utilities;
+    private readonly IKuzaineUtilities _utilities;
 
-    public AspnetcoreHttpsBuilder(ICraftsmanUtilities utilities)
+    public AspnetcoreHttpsBuilder(IKuzaineUtilities utilities)
     {
         _utilities = utilities;
     }

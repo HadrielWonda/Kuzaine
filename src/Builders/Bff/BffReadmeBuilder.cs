@@ -1,14 +1,13 @@
-﻿using Helpers;
+﻿namespace Kuzaine.Builders.Bff;
+
+using Helpers;
 using Services;
-
-
-namespace Kuzaine.Builders.Bff;
 
 public class BffReadmeBuilder
 {
-    private readonly ICraftsmanUtilities _utilities;
+    private readonly IKuzaineUtilities _utilities;
 
-    public BffReadmeBuilder(ICraftsmanUtilities utilities)
+    public BffReadmeBuilder(IKuzaineUtilities utilities)
     {
         _utilities = utilities;
     }
@@ -24,7 +23,7 @@ public class BffReadmeBuilder
     {
         return @$"# {projectName}
 
-This project was created with [Kuzaine](https://github.com/hadrielwonda/kuzaine).
+This project was created with [Kuzaine](https://github.com/pdevito3/Kuzaine).
 
 ## Getting Started
 1. Start your Auth Server and associated APIs

@@ -1,9 +1,8 @@
+namespace Kuzaine.Builders.Bff;
+
 using Domain;
 using Helpers;
 using Services;
-
-
-namespace Kuzaine.Builders.Bff;
 
 public class LaunchSettingsBuilder
 {

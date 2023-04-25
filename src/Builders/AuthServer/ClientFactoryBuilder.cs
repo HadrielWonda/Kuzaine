@@ -1,7 +1,7 @@
+namespace Kuzaine.Builders.AuthServer;
+
 using Kuzaine.Helpers;
 using Kuzaine.Services;
-
-namespace Kuzaine.Builders.AuthServer;
 
 public class ClientFactoryBuilder
 {

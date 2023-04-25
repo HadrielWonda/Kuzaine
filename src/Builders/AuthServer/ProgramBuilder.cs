@@ -1,7 +1,7 @@
-﻿using Kuzaine.Helpers;
-using Kuzaine.Services;
+﻿namespace Kuzaine.Builders.AuthServer;
 
-namespace Kuzaine.Builders.AuthServer;
+using Kuzaine.Helpers;
+using Kuzaine.Services;
 
 public class ProgramBuilder
 {

@@ -1,4 +1,4 @@
-﻿namespace Craftsman.Builders.Bff.Features.Dynamic.Api;
+﻿namespace Kuzaine.Builders.Bff.Features.Dynamic.Api;
 
 using Domain.Enums;
 using Helpers;
@@ -6,9 +6,9 @@ using Services;
 
 public class DynamicFeatureGetListEntityBuilder
 {
-    private readonly ICraftsmanUtilities _utilities;
+    private readonly IKuzaineUtilities _utilities;
 
-    public DynamicFeatureGetListEntityBuilder(ICraftsmanUtilities utilities)
+    public DynamicFeatureGetListEntityBuilder(IKuzaineUtilities utilities)
     {
         _utilities = utilities;
     }

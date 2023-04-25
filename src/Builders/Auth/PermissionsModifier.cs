@@ -1,7 +1,7 @@
-﻿using System.IO.Abstractions;
-using Services;
+﻿namespace Kuzaine.Builders.Auth;
 
-namespace Kuzaine.Builders.Auth;
+using System.IO.Abstractions;
+using Services;
 
 public class PermissionsModifier
 {

@@ -1,9 +1,7 @@
-﻿using System;
+﻿namespace Kuzaine.Builders.Endpoints;
+
+using System;
 using Domain;
-
-
-
-namespace Kuzaine.Builders.Endpoints;
 
 public class EndpointSwaggerCommentBuilders
 {

@@ -1,14 +1,13 @@
-﻿using Helpers;
+﻿namespace Kuzaine.Builders.Bff;
+
+using Helpers;
 using Services;
-
-
-namespace Kuzaine.Builders.Bff;
 
 public class AspnetcoreReactBuilder
 {
-    private readonly ICraftsmanUtilities _utilities;
+    private readonly IKuzaineUtilities _utilities;
 
-    public AspnetcoreReactBuilder(ICraftsmanUtilities utilities)
+    public AspnetcoreReactBuilder(IKuzaineUtilities utilities)
     {
         _utilities = utilities;
     }

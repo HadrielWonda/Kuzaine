@@ -1,4 +1,4 @@
-﻿namespace Craftsman.Builders.Bff.Features.Home;
+﻿namespace Kuzaine.Builders.Bff.Features.Home;
 
 using Domain.Enums;
 using Helpers;
@@ -6,9 +6,9 @@ using Services;
 
 public class HomeFeatureRoutesBuilder
 {
-    private readonly ICraftsmanUtilities _utilities;
+    private readonly IKuzaineUtilities _utilities;
 
-    public HomeFeatureRoutesBuilder(ICraftsmanUtilities utilities)
+    public HomeFeatureRoutesBuilder(IKuzaineUtilities utilities)
     {
         _utilities = utilities;
     }

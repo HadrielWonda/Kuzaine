@@ -1,9 +1,7 @@
-﻿using Helpers;
+﻿namespace Kuzaine.Builders.Bff.Components.Notifications;
+
+using Helpers;
 using Services;
-
-
-
-namespace Kuzaine.Builders.Bff.Components.Notifications;
 
 public class NotificationsComponentBuilder
 {

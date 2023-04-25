@@ -1,13 +1,11 @@
+namespace Kuzaine.Builders.Docker;
+
 using System.IO;
 using System.IO.Abstractions;
 using Domain;
 using Helpers;
 using Microsoft.VisualBasic.CompilerServices;
 using Services;
-
-
-
-namespace Kuzaine.Builders.Docker;
 
 public class DockerComposeBuilders
 {

@@ -1,4 +1,4 @@
-﻿namespace Craftsman.Builders.Bff.Features.Dynamic.Api;
+﻿namespace Kuzaine.Builders.Bff.Features.Dynamic.Api;
 
 using System;
 using System.IO;

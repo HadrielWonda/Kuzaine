@@ -1,9 +1,7 @@
+namespace Kuzaine.Builders.ExtensionBuilders;
+
 using Helpers;
 using Services;
-
-
-
-namespace Kuzaine.Builders.ExtensionBuilders;
 
 public class CorsExtensionsBuilder
 {

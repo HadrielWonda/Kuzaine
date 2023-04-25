@@ -1,8 +1,7 @@
+namespace Kuzaine.Builders.Bff;
+
 using Helpers;
 using Services;
-
-
-namespace Kuzaine.Builders.Bff;
 
 public class ViteConfigBuilder
 {

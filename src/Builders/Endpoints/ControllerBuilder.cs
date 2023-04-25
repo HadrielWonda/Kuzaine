@@ -1,10 +1,8 @@
-﻿using System;
+﻿namespace Kuzaine.Builders.Endpoints;
+
+using System;
 using Helpers;
 using Services;
-
-
-
-namespace Kuzaine.Builders.Endpoints;
 
 public class ControllerBuilder
 {
@@ -63,7 +61,7 @@ public sealed class {entityPlural}Controller: ControllerBase
         _mediator = mediator;
     }}
     
-    // endpoint marker - do not delete this comment!!!
+    // endpoint marker - do not delete this comment
 }}";
     }
 }

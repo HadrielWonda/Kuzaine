@@ -1,12 +1,9 @@
-﻿using Domain;
+﻿namespace Kuzaine.Builders.Endpoints;
+
+using Domain;
 using Domain.Enums;
 using Helpers;
 using Services;
-
-
-
-
-namespace Kuzaine.Builders.Endpoints;
 
 public class CustomUserEndpointsBuilder
 {

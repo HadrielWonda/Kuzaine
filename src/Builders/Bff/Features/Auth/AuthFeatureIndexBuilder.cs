@@ -1,9 +1,8 @@
-﻿using Domain.Enums;
+﻿namespace Kuzaine.Builders.Bff.Features.Auth;
+
+using Domain.Enums;
 using Helpers;
 using Services;
-
-
-namespace Kuzaine.Builders.Bff.Features.Auth;
 
 public class AuthFeatureBuilder
 {

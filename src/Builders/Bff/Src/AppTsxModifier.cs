@@ -1,10 +1,9 @@
-﻿using System;
+﻿namespace Kuzaine.Builders.Bff.Src;
+
+using System;
 using System.IO.Abstractions;
 using Helpers;
 using Services;
-
-
-namespace Kuzaine.Builders.Bff.Src;
 
 public class DynamicFeatureRoutesModifier
 {

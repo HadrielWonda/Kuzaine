@@ -1,14 +1,13 @@
-﻿using Helpers;
+﻿namespace Kuzaine.Builders.Bff.Components.Navigation;
+
+using Helpers;
 using Services;
-
-
-namespace Kuzaine.Builders.Bff.Components.Navigation;
 
 public class NavigationComponentBuilder
 {
-    private readonly IKuzaine.Builders.Bff.Components.NavigationUtilities _utilities;
+    private readonly IKuzaineUtilities _utilities;
 
-    public NavigationComponentBuilder(IKuzaine.Builders.Bff.Components.NavigationUtilities utilities)
+    public NavigationComponentBuilder(IKuzaineUtilities utilities)
     {
         _utilities = utilities;
     }

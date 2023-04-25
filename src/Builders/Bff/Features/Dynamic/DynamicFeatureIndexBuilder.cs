@@ -1,4 +1,4 @@
-﻿namespace Craftsman.Builders.Bff.Features.Dynamic;
+﻿namespace Kuzaine.Builders.Bff.Features.Dynamic;
 
 using Domain.Enums;
 using Helpers;
@@ -6,9 +6,9 @@ using Services;
 
 public class DynamicFeatureBuilder
 {
-    private readonly ICraftsmanUtilities _utilities;
+    private readonly IKuzaineUtilities _utilities;
 
-    public DynamicFeatureBuilder(ICraftsmanUtilities utilities)
+    public DynamicFeatureBuilder(IKuzaineUtilities utilities)
     {
         _utilities = utilities;
     }

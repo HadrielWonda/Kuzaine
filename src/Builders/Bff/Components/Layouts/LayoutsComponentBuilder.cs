@@ -1,8 +1,7 @@
-﻿using Helpers;
+﻿namespace Kuzaine.Builders.Bff.Components.Layouts;
+
+using Helpers;
 using Services;
-
-
-namespace Kuzaine.Builders.Bff.Components.Layouts;
 
 public class LayoutComponentBuilder
 {

@@ -1,8 +1,7 @@
-﻿using Helpers;
+﻿namespace Kuzaine.Builders.Dtos;
+
+using Helpers;
 using Services;
-
-
-namespace Kuzaine.Builders.Dtos;
 
 public class BasePaginationParametersBuilder
 {
