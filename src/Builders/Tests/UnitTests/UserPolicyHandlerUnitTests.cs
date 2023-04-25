@@ -1,9 +1,7 @@
-﻿using Helpers;
+﻿namespace Kuzaine.Builders.Tests.UnitTests;
+
+using Helpers;
 using Services;
-
-
-
-namespace Kuzaine.Builders.Tests.UnitTests;
 
 public class UserPolicyHandlerUnitTests
 {
@@ -27,11 +25,11 @@ public class UserPolicyHandlerUnitTests
         var entityServicesClassPath = ClassPathHelper.EntityServicesClassPath(srcDirectory, "", "RolePermissions", projectBaseName);
         var policyDomainClassPath = ClassPathHelper.PolicyDomainClassPath(srcDirectory, "", projectBaseName);
         var entityClassPath = ClassPathHelper.EntityClassPath(srcDirectory, "", "RolePermissions", projectBaseName);
-        var dtoClassPath = ClassPathHelper.DtoClassPath(srcDirectory, "", "RolePermissions", projectBaseName);
         var rolesClassPath = ClassPathHelper.EntityClassPath(srcDirectory, "", "Roles", projectBaseName);
         var userClassPath = ClassPathHelper.EntityClassPath(srcDirectory, "", "Users", projectBaseName);
         var userServicesClassPath = ClassPathHelper.EntityServicesClassPath(srcDirectory, "", "Users", projectBaseName);
         var fakeUsersClassPath = ClassPathHelper.TestFakesClassPath(testDirectory, "", "User", projectBaseName);
+        var modelClassPath = ClassPathHelper.EntityModelClassPath(srcDirectory, "RolePermission", "RolePermissions", null, projectBaseName);
 
         return @$"namespace {classPath.ClassNamespace};
 
@@ -42,18 +40,17 @@ using {servicesClassPath.ClassNamespace};
 using {entityServicesClassPath.ClassNamespace};
 using {policyDomainClassPath.ClassNamespace};
 using {entityClassPath.ClassNamespace};
-using {dtoClassPath.ClassNamespace};
+using {modelClassPath.ClassNamespace};
 using {rolesClassPath.ClassNamespace};
 using Bogus;
 using FluentAssertions;
 using MediatR;
 using MockQueryable.Moq;
 using Moq;
-using NUnit.Framework;
+using Xunit;
 using System.Threading.Tasks;
 using System.Security.Claims;
 
-[Parallelizable]
 public class UserPolicyHandlerTests
 {{
     private readonly Faker _faker;
@@ -63,7 +60,7 @@ public class UserPolicyHandlerTests
         _faker = new Faker();
     }}
 
-    [Test]
+    [Fact]
     public void GetUserPermissions_should_require_user()
     {{
         // Arrange
@@ -87,7 +84,7 @@ public class UserPolicyHandlerTests
         permissions.Should().ThrowAsync<ArgumentNullException>();
     }}
     
-    [Test]
+    [Fact]
     public async Task superadmin_user_gets_all_permissions()
     {{
         // Arrange
@@ -108,7 +105,7 @@ public class UserPolicyHandlerTests
         permissions.Should().BeEquivalentTo(Permissions.List().ToArray());
     }}
     
-    [Test]
+    [Fact]
     public async Task superadmin_machine_gets_all_permissions()
     {{
         // Arrange
@@ -129,7 +126,7 @@ public class UserPolicyHandlerTests
         permissions.Should().BeEquivalentTo(Permissions.List().ToArray());
     }}
     
-    [Test]
+    [Fact]
     public async Task non_super_admin_gets_assigned_permissions_only()
     {{
         // Arrange
@@ -145,7 +142,7 @@ public class UserPolicyHandlerTests
         userRepo.UsersExist();
         userRepo.SetRole(nonSuperAdminRole);
     
-        var rolePermission = RolePermission.Create(new RolePermissionForCreationDto()
+        var rolePermission = RolePermission.Create(new RolePermissionForCreation()
         {{
             Role = nonSuperAdminRole,
             Permission = permissionToAssign
@@ -167,7 +164,7 @@ public class UserPolicyHandlerTests
         permissions.Should().NotContain(randomOtherPermission);
     }}
     
-    [Test]
+    [Fact]
     public async Task claims_role_duplicate_permissions_removed()
     {{
         // Arrange
@@ -182,7 +179,7 @@ public class UserPolicyHandlerTests
         userRepo.UsersExist();
         userRepo.SetRole(nonSuperAdminRole);
     
-        var rolePermission = RolePermission.Create(new RolePermissionForCreationDto()
+        var rolePermission = RolePermission.Create(new RolePermissionForCreation()
         {{
             Role = nonSuperAdminRole,
             Permission = permissionToAssign
@@ -215,7 +212,7 @@ public static class UserExtensions
 
     public static void UsersExist(this Mock<IUserRepository> repo)
     {{
-        var user = FakeUser.Generate();
+        var user = new FakeUserBuilder().Build();
         var users = new List<User>() {{user}};
         var mockData = users.AsQueryable().BuildMock();
         

@@ -1,11 +1,9 @@
-﻿using Kuzaine.Domain;
+﻿namespace Kuzaine.Builders.NextJs.Domain;
+
+using Kuzaine.Domain;
 using Kuzaine.Domain.Enums;
 using Kuzaine.Helpers;
 using Kuzaine.Services;
-
-
-
-namespace Kuzaine.Builders.NextJs.Domain;
 
 public class NextJsEntityIndexBuilder
 {
@@ -16,9 +14,7 @@ public class NextJsEntityIndexBuilder
         _utilities = utilities;
     }
 
-    public void CreateFile(string nextSrc, string entityName,
-     string entityPlural, List<NextJsEntityProperty> properties
-     )
+    public void CreateFile(string nextSrc, string entityName, string entityPlural, List<NextJsEntityProperty> properties)
     {
         var routesIndexClassPath = ClassPathHelper.NextJsSpaFeatureClassPath(nextSrc,
             entityPlural,

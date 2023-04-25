@@ -1,14 +1,12 @@
-﻿using System;
+﻿namespace Kuzaine.Builders.Tests.FunctionalTests;
+
+using System;
 using System.IO;
 using Domain;
 using Domain.Enums;
 using Helpers;
 using IntegrationTests.Services;
 using Services;
-
-
-
-namespace Kuzaine.Builders.Tests.FunctionalTests;
 
 public class GetEntityRecordTestBuilder
 {
@@ -47,7 +45,7 @@ public class GetEntityRecordTestBuilder
 using {fakerClassPath.ClassNamespace};
 using {testUtilClassPath.ClassNamespace};{permissionsUsing}{foreignEntityUsings}
 using FluentAssertions;
-using NUnit.Framework;
+using Xunit;
 using System.Net;
 using System.Threading.Tasks;
 
@@ -63,7 +61,7 @@ public class {Path.GetFileNameWithoutExtension(classPath.FullClassPath)} : TestB
         var fakeEntityVariableName = $"fake{entity.Name}";
         var pkName = Entity.PrimaryKeyProperty.Name;
         var fakeCreationDto = FileNames.FakerName(FileNames.GetDtoName(entity.Name, Dto.Creation));
-        var fakeParent = IntegrationTestServices.FakeParentTestHelpers(entity, out var fakeParentIdRuleFor);
+        var fakeParent = FunctionalTestServices.FakeParentTestHelpersForBuilders(entity, out var fakeParentIdRuleFor);
 
         var testName = $"get_{entity.Name.ToLower()}_returns_success_when_entity_exists";
         testName += isProtected ? "_using_valid_auth_credentials" : "";
@@ -72,11 +70,11 @@ public class {Path.GetFileNameWithoutExtension(classPath.FullClassPath)} : TestB
         var user = await AddNewSuperAdmin();
         FactoryClient.AddAuth(user.Identifier);" : "";
 
-        return $@"[Test]
+        return $@"[Fact]
     public async Task {testName}()
     {{
         // Arrange
-        {fakeParent}var {fakeEntityVariableName} = {fakeEntity}.Generate(new {fakeCreationDto}(){fakeParentIdRuleFor}.Generate());{clientAuth}
+        {fakeParent}var {fakeEntityVariableName} = new {FileNames.FakeBuilderName(entity.Name)}(){fakeParentIdRuleFor}.Build();{clientAuth}
         await InsertAsync({fakeEntityVariableName});
 
         // Act
@@ -96,11 +94,11 @@ public class {Path.GetFileNameWithoutExtension(classPath.FullClassPath)} : TestB
         var fakeCreationDto = FileNames.FakerName(FileNames.GetDtoName(entity.Name, Dto.Creation));
 
         return $@"
-    [Test]
+    [Fact]
     public async Task get_{entity.Name.ToLower()}_returns_unauthorized_without_valid_token()
     {{
         // Arrange
-        var {fakeEntityVariableName} = {fakeEntity}.Generate(new {fakeCreationDto}().Generate());
+        var {fakeEntityVariableName} = new {FileNames.FakeBuilderName(entity.Name)}().Build();
 
         // Act
         var route = ApiRoutes.{entity.Plural}.GetRecord({fakeEntityVariableName}.{pkName});
@@ -119,11 +117,11 @@ public class {Path.GetFileNameWithoutExtension(classPath.FullClassPath)} : TestB
         var fakeCreationDto = FileNames.FakerName(FileNames.GetDtoName(entity.Name, Dto.Creation));
 
         return $@"
-    [Test]
+    [Fact]
     public async Task get_{entity.Name.ToLower()}_returns_forbidden_without_proper_scope()
     {{
         // Arrange
-        var {fakeEntityVariableName} = {fakeEntity}.Generate(new {fakeCreationDto}().Generate());
+        var {fakeEntityVariableName} = new {FileNames.FakeBuilderName(entity.Name)}().Build();
         FactoryClient.AddAuth();
 
         // Act

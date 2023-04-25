@@ -1,9 +1,7 @@
-﻿using Helpers;
+﻿namespace Kuzaine.Builders.Tests.Utilities;
+
+using Helpers;
 using Services;
-
-
-
-namespace Kuzaine.Builders.Tests.Utilities;
 
 public class ApiRoutesBuilder
 {

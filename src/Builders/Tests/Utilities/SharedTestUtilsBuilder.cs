@@ -4,7 +4,7 @@ using Kuzaine.Helpers;
 using Kuzaine.Services;
 using MediatR;
 
-public static class UnitTestUtilsBuilder
+public static class SharedTestUtilsBuilder
 {
     public class Command : IRequest<bool>
     {
@@ -24,7 +24,9 @@ public static class UnitTestUtilsBuilder
 
         public Task<bool> Handle(Command request, CancellationToken cancellationToken)
         {
-            var classPath = ClassPathHelper.UnitTestHelpersClassPath(_scaffoldingDirectoryStore.TestDirectory, $"{FileNames.UnitTestUtilsName()}.cs", _scaffoldingDirectoryStore.ProjectBaseName);
+            var classPath = ClassPathHelper.SharedTestUtilitiesClassPath(_scaffoldingDirectoryStore.TestDirectory,
+                $"{FileNames.UnitTestUtilsName()}.cs", 
+                _scaffoldingDirectoryStore.ProjectBaseName);
             var fileText = GetFileText(classPath.ClassNamespace);
             _utilities.CreateFile(classPath, fileText);
             return Task.FromResult(true);
@@ -34,29 +36,19 @@ public static class UnitTestUtilsBuilder
         {
             return @$"namespace {classNamespace};
 
-using System.Reflection;
-using Mapster;
-using MapsterMapper;
-using Services;
+using System.Net;
+using System.Net.Sockets;
 
-public class UnitTestUtils
+public class DockerUtilities
 {{
-    public static Mapper GetApiMapper()
+    public static int GetFreePort()
     {{
-        var apiAssembly = GetApiAssembly();
-        var typeAdapterConfig = TypeAdapterConfig.GlobalSettings.Clone();
-        typeAdapterConfig.Scan(apiAssembly);
-        var mapper = new Mapper(typeAdapterConfig);
-        return mapper;
-    }}
-
-    public static Assembly GetApiAssembly()
-    {{
-        // need to load something from the api for it to be in the loaded assemblies
-        _ = new DateTimeProvider();
-        return AppDomain.CurrentDomain
-            .GetAssemblies()
-            .FirstOrDefault(a => a.GetName().Name == ""{_scaffoldingDirectoryStore.ProjectBaseName}"");
+        // From https://stackoverflow.com/a/150974/4190785
+        var tcpListener = new TcpListener(IPAddress.Loopback, 0);
+        tcpListener.Start();
+        var port = ((IPEndPoint)tcpListener.LocalEndpoint).Port;
+        tcpListener.Stop();
+        return port;
     }}
 }}
 ";

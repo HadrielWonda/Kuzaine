@@ -1,12 +1,10 @@
-﻿using Kuzaine.Services;
+﻿namespace Kuzaine.Builders.Tests.IntegrationTests;
+
+using Kuzaine.Services;
 using Domain;
 using Domain.Enums;
 using Helpers;
 using Services;
-
-
-
-namespace Kuzaine.Builders.Tests.IntegrationTests;
 
 public class GetRecordQueryTestBuilder
 {
@@ -17,14 +15,15 @@ public class GetRecordQueryTestBuilder
         _utilities = utilities;
     }
 
-    public void CreateTests(string solutionDirectory, string testDirectory, string srcDirectory, Entity entity, string projectBaseName)
+    public void CreateTests(string solutionDirectory, string testDirectory, string srcDirectory, Entity entity, string projectBaseName, string permission, bool featureIsProtected)
     {
         var classPath = ClassPathHelper.FeatureTestClassPath(testDirectory, $"{entity.Name}QueryTests.cs", entity.Plural, projectBaseName);
-        var fileText = WriteTestFileText(solutionDirectory, testDirectory, srcDirectory, classPath, entity, projectBaseName);
+        var fileText = WriteTestFileText(solutionDirectory, testDirectory, srcDirectory, classPath, entity, projectBaseName, permission, featureIsProtected);
         _utilities.CreateFile(classPath, fileText);
     }
 
-    private static string WriteTestFileText(string solutionDirectory, string testDirectory, string srcDirectory, ClassPath classPath, Entity entity, string projectBaseName)
+    private static string WriteTestFileText(string solutionDirectory, string testDirectory, string srcDirectory,
+        ClassPath classPath, Entity entity, string projectBaseName, string permission, bool featureIsProtected)
     {
         var featureName = FileNames.GetEntityFeatureClassName(entity.Name);
         var testFixtureName = FileNames.GetIntegrationTestFixtureName();
@@ -34,45 +33,47 @@ public class GetRecordQueryTestBuilder
         var featuresClassPath = ClassPathHelper.FeaturesClassPath(srcDirectory, featureName, entity.Plural, projectBaseName);
         var exceptionsClassPath = ClassPathHelper.ExceptionsClassPath(solutionDirectory, "");
         var foreignEntityUsings = KuzaineUtilities.GetForeignEntityUsings(testDirectory, entity, projectBaseName);
+        var permissionTest = !featureIsProtected ? null : GetPermissionTest(featureName, permission);
 
         return @$"namespace {classPath.ClassNamespace};
 
 using {fakerClassPath.ClassNamespace};
 using {featuresClassPath.ClassNamespace};
+using {exceptionsClassPath.ClassNamespace};
+using Domain;
 using FluentAssertions;
 using FluentAssertions.Extensions;
 using Microsoft.EntityFrameworkCore;
-using NUnit.Framework;
-using {exceptionsClassPath.ClassNamespace};
-using System.Threading.Tasks;
-using static {testFixtureName};{foreignEntityUsings}
+using Xunit;
+using System.Threading.Tasks;{foreignEntityUsings}
 
 public class {classPath.ClassNameWithoutExt} : TestBase
 {{
-    {GetTest(queryName, entity, featureName)}{GetWithoutKeyTest(queryName, entity, featureName)}
+    {GetTest(queryName, entity, featureName)}{GetWithoutKeyTest(queryName, entity, featureName)}{permissionTest}
 }}";
     }
 
     private static string GetTest(string queryName, Entity entity, string featureName)
     {
-        var fakeEntity = FileNames.FakerName(entity.Name);
-        var fakeCreationDto = FileNames.FakerName(FileNames.GetDtoName(entity.Name, Dto.Creation));
         var fakeEntityVariableName = $"fake{entity.Name}One";
         var lowercaseEntityName = entity.Name.LowercaseFirstLetter();
         var pkName = Entity.PrimaryKeyProperty.Name;
 
-        var fakeParent = IntegrationTestServices.FakeParentTestHelpers(entity, out var fakeParentIdRuleFor);
+        var fakeParent = IntegrationTestServices.FakeParentTestHelpersForBuilders(entity, out var fakeParentIdRuleFor);
+        if (fakeParentIdRuleFor != "")
+            fakeParentIdRuleFor += $"{Environment.NewLine}            ";
 
-        return $@"[Test]
+        return $@"[Fact]
     public async Task can_get_existing_{entity.Name.ToLower()}_with_accurate_props()
     {{
         // Arrange
-        {fakeParent}var {fakeEntityVariableName} = {fakeEntity}.Generate(new {fakeCreationDto}(){fakeParentIdRuleFor}.Generate());
-        await InsertAsync({fakeEntityVariableName});
+        var testingServiceScope = new {FileNames.TestingServiceScope()}();
+        {fakeParent}var {fakeEntityVariableName} = new {FileNames.FakeBuilderName(entity.Name)}(){fakeParentIdRuleFor}.Build();
+        await testingServiceScope.InsertAsync({fakeEntityVariableName});
 
         // Act
         var query = new {featureName}.{queryName}({fakeEntityVariableName}.{pkName});
-        var {lowercaseEntityName} = await SendAsync(query);
+        var {lowercaseEntityName} = await testingServiceScope.SendAsync(query);
 
         // Assert{GetAssertions(entity.Properties, lowercaseEntityName, fakeEntityVariableName)}
     }}";
@@ -84,15 +85,16 @@ public class {classPath.ClassNameWithoutExt} : TestBase
 
         return badId == "" ? "" : $@"
 
-    [Test]
+    [Fact]
     public async Task get_{entity.Name.ToLower()}_throws_notfound_exception_when_record_does_not_exist()
     {{
         // Arrange
+        var testingServiceScope = new {FileNames.TestingServiceScope()}();
         var badId = {badId};
 
         // Act
         var query = new {featureName}.{queryName}(badId);
-        Func<Task> act = () => SendAsync(query);
+        Func<Task> act = () => testingServiceScope.SendAsync(query);
 
         // Assert
         await act.Should().ThrowAsync<NotFoundException>();
@@ -120,5 +122,27 @@ public class {classPath.ClassNameWithoutExt} : TestBase
         }
 
         return entityAssertions;
+    }
+    
+    private static string GetPermissionTest(string featureName, string permission)
+    {
+        var queryName = FileNames.QueryListName();
+        
+        return $@"
+
+    [Fact]
+    public async Task must_be_permitted()
+    {{
+        // Arrange
+        var testingServiceScope = new {FileNames.TestingServiceScope()}();
+        testingServiceScope.SetUserNotPermitted(Permissions.{permission});
+
+        // Act
+        var command = new {featureName}.{queryName}(Guid.NewGuid());
+        Func<Task> act = () => testingServiceScope.SendAsync(command);
+
+        // Assert
+        await act.Should().ThrowAsync<ForbiddenAccessException>();
+    }}";
     }
 }

@@ -1,13 +1,11 @@
-﻿using System;
+﻿namespace Kuzaine.Builders.Tests.FunctionalTests;
+
+using System;
 using System.IO;
+using Kuzaine.Services;
 using Domain;
 using Domain.Enums;
 using Helpers;
-using Services;
-
-
-
-namespace Kuzaine.Builders.Tests.FunctionalTests;
 
 public class CreateEntityTestBuilder
 {
@@ -46,7 +44,7 @@ public class CreateEntityTestBuilder
 using {fakerClassPath.ClassNamespace};
 using {testUtilClassPath.ClassNamespace};{permissionsUsing}{foreignEntityUsings}
 using FluentAssertions;
-using NUnit.Framework;
+using Xunit;
 using System.Net;
 using System.Threading.Tasks;
 
@@ -67,12 +65,14 @@ public class {Path.GetFileNameWithoutExtension(classPath.FullClassPath)} : TestB
         {
             if (entityProperty.IsForeignKey && !entityProperty.IsMany && entityProperty.IsPrimitiveType)
             {
-                var fakeParentClass = FileNames.FakerName(entityProperty.ForeignEntityName);
-                var fakeParentCreationDto = FileNames.FakerName(FileNames.GetDtoName(entityProperty.ForeignEntityName, Dto.Creation));
-                fakeParent += @$"var fake{entityProperty.ForeignEntityName}One = {fakeParentClass}.Generate(new {fakeParentCreationDto}().Generate());
-        await InsertAsync(fake{entityProperty.ForeignEntityName}One);{Environment.NewLine}{Environment.NewLine}        ";
+                var baseVarName = entityProperty.ForeignEntityName != entity.Name
+                    ? $"{entityProperty.ForeignEntityName}"
+                    : $"{entityProperty.ForeignEntityName}Parent";
+                var fakeParentBuilder = FileNames.FakeBuilderName(entityProperty.ForeignEntityName);
+                fakeParent += @$"var fake{baseVarName}One = new {fakeParentBuilder}().Build();
+        await InsertAsync(fake{baseVarName}One);{Environment.NewLine}{Environment.NewLine}        ";
                 fakeParentIdRuleFor +=
-                    $"{Environment.NewLine}            .RuleFor({entity.Lambda} => {entity.Lambda}.{entityProperty.Name}, _ => fake{entityProperty.ForeignEntityName}One.Id){Environment.NewLine}            ";
+                    $"{Environment.NewLine}            .RuleFor({entity.Lambda} => {entity.Lambda}.{entityProperty.Name}, _ => fake{baseVarName}One.Id)";
             }
         }
 
@@ -83,7 +83,7 @@ public class {Path.GetFileNameWithoutExtension(classPath.FullClassPath)} : TestB
         var user = await AddNewSuperAdmin();
         FactoryClient.AddAuth(user.Identifier);" : "";
 
-        return $@"[Test]
+        return $@"[Fact]
     public async Task {testName}()
     {{
         // Arrange
@@ -104,7 +104,7 @@ public class {Path.GetFileNameWithoutExtension(classPath.FullClassPath)} : TestB
         var fakeCreationDto = $"Fake{FileNames.GetDtoName(entity.Name, Dto.Creation)}";
 
         return $@"
-    [Test]
+    [Fact]
     public async Task create_{entity.Name.ToLower()}_returns_unauthorized_without_valid_token()
     {{
         // Arrange
@@ -125,7 +125,7 @@ public class {Path.GetFileNameWithoutExtension(classPath.FullClassPath)} : TestB
         var fakeCreationDto = $"Fake{FileNames.GetDtoName(entity.Name, Dto.Creation)}";
 
         return $@"
-    [Test]
+    [Fact]
     public async Task create_{entity.Name.ToLower()}_returns_forbidden_without_proper_scope()
     {{
         // Arrange

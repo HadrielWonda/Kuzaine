@@ -1,9 +1,7 @@
-﻿using Helpers;
+﻿namespace Kuzaine.Builders.Projects;
+
+using Helpers;
 using Services;
-
-
-
-namespace Kuzaine.Builders.Projects;
 
 public class BffProjBuilder
 {
@@ -26,7 +24,7 @@ public class BffProjBuilder
         return @$"<Project Sdk=""Microsoft.NET.Sdk.Web"">
 
   <PropertyGroup>
-    <TargetFramework>net7.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <Nullable>enable</Nullable>
     <TypeScriptCompileBlocked>true</TypeScriptCompileBlocked>
     <TypeScriptToolsVersion>Latest</TypeScriptToolsVersion>
@@ -42,8 +40,8 @@ public class BffProjBuilder
   <ItemGroup>
     <PackageReference Include=""Duende.BFF"" Version=""1.1.3"" />
     <PackageReference Include=""Duende.BFF.Yarp"" Version=""1.1.3"" />
-    <PackageReference Include=""Microsoft.AspNetCore.SpaProxy"" Version=""7.0.1"" />
-    <PackageReference Include=""Microsoft.AspNetCore.Authentication.OpenIdConnect"" Version=""7.0.1"" />
+    <PackageReference Include=""Microsoft.AspNetCore.SpaProxy"" Version=""6.0.0"" />
+    <PackageReference Include=""Microsoft.AspNetCore.Authentication.OpenIdConnect"" Version=""6.0.0"" />
     <PackageReference Include=""Serilog.AspNetCore"" Version=""5.00"" />
     <PackageReference Include=""Serilog.Enrichers.AspNetCore"" Version=""1.0.0"" />
     <PackageReference Include=""Serilog.Enrichers.Context"" Version=""4.2.0"" />

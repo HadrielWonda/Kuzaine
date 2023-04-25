@@ -1,12 +1,10 @@
-﻿using System;
+﻿namespace Kuzaine.Builders.Tests.FunctionalTests;
+
+using System;
 using System.IO;
 using Domain;
 using Helpers;
 using Services;
-
-
-
-namespace Kuzaine.Builders.Tests.FunctionalTests;
 
 public class GetEntityListTestBuilder
 {
@@ -44,7 +42,7 @@ public class GetEntityListTestBuilder
 using {fakerClassPath.ClassNamespace};
 using {testUtilClassPath.ClassNamespace};{permissionsUsing}
 using FluentAssertions;
-using NUnit.Framework;
+using Xunit;
 using System.Net;
 using System.Threading.Tasks;
 
@@ -63,7 +61,7 @@ public class {Path.GetFileNameWithoutExtension(classPath.FullClassPath)} : TestB
         var user = await AddNewSuperAdmin();
         FactoryClient.AddAuth(user.Identifier);" : "";
 
-        return $@"[Test]
+        return $@"[Fact]
     public async Task {testName}()
     {{
         // Arrange
@@ -80,7 +78,7 @@ public class {Path.GetFileNameWithoutExtension(classPath.FullClassPath)} : TestB
     private static string GetEntityTestUnauthorized(Entity entity)
     {
         return $@"
-    [Test]
+    [Fact]
     public async Task get_{entity.Name.ToLower()}_list_returns_unauthorized_without_valid_token()
     {{
         // Arrange
@@ -97,7 +95,7 @@ public class {Path.GetFileNameWithoutExtension(classPath.FullClassPath)} : TestB
     private static string GetEntityTestForbidden(Entity entity)
     {
         return $@"
-    [Test]
+    [Fact]
     public async Task get_{entity.Name.ToLower()}_list_returns_forbidden_without_proper_scope()
     {{
         // Arrange

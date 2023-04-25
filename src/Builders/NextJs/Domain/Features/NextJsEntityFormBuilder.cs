@@ -1,11 +1,9 @@
-﻿using Kuzaine.Domain;
+﻿namespace Kuzaine.Builders.NextJs.Domain.Features;
+
+using Kuzaine.Domain;
 using Kuzaine.Domain.Enums;
 using Kuzaine.Helpers;
 using Kuzaine.Services;
-
-
-
-namespace Kuzaine.Builders.NextJs.Domain.Features;
 
 public class NextJsEntityFormBuilder
 {

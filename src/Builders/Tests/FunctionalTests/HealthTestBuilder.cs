@@ -1,10 +1,8 @@
-﻿using System.IO;
+﻿namespace Kuzaine.Builders.Tests.FunctionalTests;
+
+using System.IO;
 using Helpers;
 using Services;
-
-
-
-namespace Kuzaine.Builders.Tests.FunctionalTests;
 
 public class HealthTestBuilder
 {
@@ -30,7 +28,7 @@ public class HealthTestBuilder
 
 using {testUtilClassPath.ClassNamespace};
 using FluentAssertions;
-using NUnit.Framework;
+using Xunit;
 using System.Net;
 using System.Threading.Tasks;
 
@@ -42,7 +40,7 @@ public class {Path.GetFileNameWithoutExtension(classPath.FullClassPath)} : TestB
 
     private static string HealthTest()
     {
-        return $@"[Test]
+        return $@"[Fact]
     public async Task health_check_returns_ok()
     {{
         // Arrange

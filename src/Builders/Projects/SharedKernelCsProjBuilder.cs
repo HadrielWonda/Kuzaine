@@ -1,9 +1,7 @@
-﻿using Helpers;
+﻿namespace Kuzaine.Builders.Projects;
+
+using Helpers;
 using Services;
-
-
-
-namespace Kuzaine.Builders.Projects;
 
 public class SharedKernelCsProjBuilder
 {

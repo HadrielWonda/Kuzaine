@@ -1,13 +1,11 @@
-﻿using System;
+﻿namespace Kuzaine.Builders.Tests.FunctionalTests;
+
+using System;
 using System.IO;
 using Domain;
 using Domain.Enums;
 using Helpers;
 using Services;
-
-
-
-namespace Kuzaine.Builders.Tests.FunctionalTests;
 
 public class PatchEntityTestBuilder
 {
@@ -48,7 +46,7 @@ using {dtoClassPath.ClassNamespace};
 using {testUtilClassPath.ClassNamespace};{permissionsUsing}
 using Microsoft.AspNetCore.JsonPatch;
 using FluentAssertions;
-using NUnit.Framework;
+using Xunit;
 using System.Net;
 using System.Threading.Tasks;
 using Bogus;
@@ -88,7 +86,7 @@ public class {Path.GetFileNameWithoutExtension(classPath.FullClassPath)} : TestB
         if (myProp == null)
             return "// no patch tests were created";
 
-        return $@"[Test]
+        return $@"[Fact]
     public async Task {testName}()
     {{
         // Arrange
@@ -117,7 +115,7 @@ public class {Path.GetFileNameWithoutExtension(classPath.FullClassPath)} : TestB
         var fakeCreationDto = FileNames.FakerName(FileNames.GetDtoName(entity.Name, Dto.Creation));
 
         return $@"
-    [Test]
+    [Fact]
     public async Task patch_{entity.Name.ToLower()}_returns_unauthorized_without_valid_token()
     {{
         // Arrange
@@ -145,7 +143,7 @@ public class {Path.GetFileNameWithoutExtension(classPath.FullClassPath)} : TestB
         var fakeCreationDto = FileNames.FakerName(FileNames.GetDtoName(entity.Name, Dto.Creation));
 
         return $@"
-    [Test]
+    [Fact]
     public async Task patch_{entity.Name.ToLower()}_returns_forbidden_without_proper_scope()
     {{
         // Arrange

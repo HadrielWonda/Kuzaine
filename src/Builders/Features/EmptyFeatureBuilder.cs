@@ -1,10 +1,8 @@
-﻿using Domain;
+﻿namespace Kuzaine.Builders.Features;
+
+using Domain;
 using Helpers;
 using Services;
-
-
-
-namespace Kuzaine.Builders.Features;
 
 public class EmptyFeatureBuilder
 {

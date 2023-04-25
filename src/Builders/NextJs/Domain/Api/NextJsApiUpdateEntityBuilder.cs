@@ -1,10 +1,8 @@
-﻿using Kuzaine.Domain.Enums;
+﻿namespace Kuzaine.Builders.NextJs.Domain.Api;
+
+using Kuzaine.Domain.Enums;
 using Kuzaine.Helpers;
 using Kuzaine.Services;
-
-
-
-namespace Kuzaine.Builders.NextJs.Domain.Api;
 
 public class NextJsApiUpdateEntityBuilder
 {

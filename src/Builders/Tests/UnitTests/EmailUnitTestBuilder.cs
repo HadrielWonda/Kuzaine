@@ -1,11 +1,9 @@
-﻿using System.IO;
+﻿namespace Kuzaine.Builders.Tests.UnitTests;
+
+using System.IO;
 using Domain.Enums;
 using Helpers;
 using Services;
-
-
-
-namespace Kuzaine.Builders.Tests.UnitTests;
 
 public class EmailUnitTestBuilder
 {
@@ -32,9 +30,8 @@ public class EmailUnitTestBuilder
 using {entityClassPath.ClassNamespace};
 using Bogus;
 using FluentAssertions;
-using NUnit.Framework;
+using Xunit;
 
-[Parallelizable]
 public class {Path.GetFileNameWithoutExtension(classPath.FullClassPath)}
 {{
     private readonly Faker _faker;
@@ -44,7 +41,7 @@ public class {Path.GetFileNameWithoutExtension(classPath.FullClassPath)}
         _faker = new Faker();
     }}
     
-    [Test]
+    [Fact]
     public void can_create_valid_email()
     {{
         var validEmail = _faker.Person.Email;
@@ -52,7 +49,7 @@ public class {Path.GetFileNameWithoutExtension(classPath.FullClassPath)}
         emailVo.Value.Should().Be(validEmail);
     }}
 
-    [Test]
+    [Fact]
     public void can_not_add_invalid_email()
     {{
         var validEmail = _faker.Lorem.Word();
@@ -60,7 +57,7 @@ public class {Path.GetFileNameWithoutExtension(classPath.FullClassPath)}
         act.Should().Throw<FluentValidation.ValidationException>();
     }}
 
-    [Test]
+    [Fact]
     public void email_can_be_null()
     {{
         var emailVo = new Email(null);

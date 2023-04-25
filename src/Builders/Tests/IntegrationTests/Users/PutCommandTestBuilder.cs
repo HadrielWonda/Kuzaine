@@ -1,12 +1,10 @@
-﻿using Kuzaine.Builders.Tests.IntegrationTests.Services;
+﻿namespace Kuzaine.Builders.Tests.IntegrationTests.Users;
+
+using Kuzaine.Builders.Tests.IntegrationTests.Services;
 using Kuzaine.Domain;
 using Kuzaine.Domain.Enums;
 using Kuzaine.Helpers;
 using Kuzaine.Services;
-
-
-
-namespace Kuzaine.Builders.Tests.IntegrationTests.Users;
 
 public class PutCommandTestBuilder
 {
@@ -42,7 +40,7 @@ public class PutCommandTestBuilder
         var featuresClassPath = ClassPathHelper.FeaturesClassPath(srcDirectory, featureName, entity.Plural, projectBaseName);
         var exceptionsClassPath = ClassPathHelper.ExceptionsClassPath(solutionDirectory, projectBaseName);
 
-        var fakeParent = IntegrationTestServices.FakeParentTestHelpers(entity, out var fakeParentIdRuleFor);
+        var fakeParent = IntegrationTestServices.FakeParentTestHelpersForBuilders(entity, out var fakeParentIdRuleFor);
         var foreignEntityUsings = KuzaineUtilities.GetForeignEntityUsings(testDirectory, entity, projectBaseName);
 
         return @$"namespace {classPath.ClassNamespace};
@@ -53,28 +51,28 @@ using {exceptionsClassPath.ClassNamespace};
 using {featuresClassPath.ClassNamespace};
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
-using NUnit.Framework;
-using System.Threading.Tasks;
-using static {testFixtureName};{foreignEntityUsings}
+using Xunit;
+using System.Threading.Tasks;{foreignEntityUsings}
 
 public class {classPath.ClassNameWithoutExt} : TestBase
 {{
-    [Test]
+    [Fact]
     public async Task can_update_existing_{entity.Name.ToLower()}_in_db()
     {{
         // Arrange
-        {fakeParent}var {fakeEntityVariableName} = {fakeEntity}.Generate(new {fakeCreationDto}(){fakeParentIdRuleFor}.Generate());
+        var testingServiceScope = new {FileNames.TestingServiceScope()}();
+        {fakeParent}var {fakeEntityVariableName} = new {FileNames.FakeBuilderName(entity.Name)}(){fakeParentIdRuleFor}.Build();
         var updated{entity.Name}Dto = new {fakeUpdateDto}(){fakeParentIdRuleFor}.Generate();
-        await InsertAsync({fakeEntityVariableName});
+        await testingServiceScope.InsertAsync({fakeEntityVariableName});
 
-        var {lowercaseEntityName} = await ExecuteDbContextAsync(db => db.{entity.Plural}
+        var {lowercaseEntityName} = await testingServiceScope.ExecuteDbContextAsync(db => db.{entity.Plural}
             .FirstOrDefaultAsync({entity.Lambda} => {entity.Lambda}.Id == {fakeEntityVariableName}.Id));
         var {lowercaseEntityPk} = {lowercaseEntityName}.{pkName};
 
         // Act
         var command = new {featureName}.{commandName}({lowercaseEntityPk}, updated{entity.Name}Dto);
-        await SendAsync(command);
-        var updated{entity.Name} = await ExecuteDbContextAsync(db => db.{entity.Plural}.FirstOrDefaultAsync({entity.Lambda} => {entity.Lambda}.{pkName} == {lowercaseEntityPk}));
+        await testingServiceScope.SendAsync(command);
+        var updated{entity.Name} = await testingServiceScope.ExecuteDbContextAsync(db => db.{entity.Plural}.FirstOrDefaultAsync({entity.Lambda} => {entity.Lambda}.{pkName} == {lowercaseEntityPk}));
 
         // Assert
         updatedUser?.FirstName.Should().Be(updatedUserDto.FirstName);

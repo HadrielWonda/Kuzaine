@@ -1,10 +1,8 @@
-﻿using Kuzaine.Domain.Enums;
+﻿namespace Kuzaine.Builders.NextJs.Domain.Pages;
+
+using Kuzaine.Domain.Enums;
 using Kuzaine.Helpers;
 using Kuzaine.Services;
-
-
-
-namespace Kuzaine.Builders.NextJs.Domain.Pages;
 
 public class NextJsEditEntityPageBuilder
 {
@@ -67,7 +65,7 @@ export default function Edit{entityName}() {{
             </div>
           </div>
         ) : (
-          <Forbidden/> //or....not
+          <Forbidden/>
         )}}
       </PrivateLayout>
     </>

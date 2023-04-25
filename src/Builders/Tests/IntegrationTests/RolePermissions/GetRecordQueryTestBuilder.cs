@@ -1,12 +1,10 @@
-﻿using Kuzaine.Builders.Tests.IntegrationTests.Services;
+﻿namespace Kuzaine.Builders.Tests.IntegrationTests.RolePermissions;
+
+using Kuzaine.Builders.Tests.IntegrationTests.Services;
 using Kuzaine.Domain;
 using Kuzaine.Domain.Enums;
 using Kuzaine.Helpers;
 using Kuzaine.Services;
-
-
-
-namespace Kuzaine.Builders.Tests.IntegrationTests.RolePermissions;
 
 public class GetRecordQueryTestBuilder
 {
@@ -41,10 +39,9 @@ using {fakerClassPath.ClassNamespace};
 using {featuresClassPath.ClassNamespace};
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
-using NUnit.Framework;
+using Xunit;
 using {exceptionsClassPath.ClassNamespace};
-using System.Threading.Tasks;
-using static {testFixtureName};{foreignEntityUsings}
+using System.Threading.Tasks;{foreignEntityUsings}
 
 public class {classPath.ClassNameWithoutExt} : TestBase
 {{
@@ -54,24 +51,23 @@ public class {classPath.ClassNameWithoutExt} : TestBase
 
     private static string GetTest(string queryName, Entity entity, string featureName)
     {
-        var fakeEntity = FileNames.FakerName(entity.Name);
-        var fakeCreationDto = FileNames.FakerName(FileNames.GetDtoName(entity.Name, Dto.Creation));
         var fakeEntityVariableName = $"fake{entity.Name}One";
         var lowercaseEntityName = entity.Name.LowercaseFirstLetter();
         var pkName = Entity.PrimaryKeyProperty.Name;
 
-        var fakeParent = IntegrationTestServices.FakeParentTestHelpers(entity, out var fakeParentIdRuleFor);
+        var fakeParent = IntegrationTestServices.FakeParentTestHelpersForBuilders(entity, out var fakeParentIdRuleFor);
 
-        return $@"[Test]
+        return $@"[Fact]
     public async Task can_get_existing_{entity.Name.ToLower()}_with_accurate_props()
     {{
         // Arrange
-        {fakeParent}var {fakeEntityVariableName} = {fakeEntity}.Generate(new {fakeCreationDto}(){fakeParentIdRuleFor}.Generate());
-        await InsertAsync({fakeEntityVariableName});
+        var testingServiceScope = new {FileNames.TestingServiceScope()}();
+        {fakeParent}var {fakeEntityVariableName} = new {FileNames.FakeBuilderName(entity.Name)}(){fakeParentIdRuleFor}.Build();
+        await testingServiceScope.InsertAsync({fakeEntityVariableName});
 
         // Act
         var query = new {featureName}.{queryName}({fakeEntityVariableName}.{pkName});
-        var {lowercaseEntityName} = await SendAsync(query);
+        var {lowercaseEntityName} = await testingServiceScope.SendAsync(query);
 
         // Assert
         {lowercaseEntityName}.Permission.Should().Be({fakeEntityVariableName}.Permission);
@@ -85,15 +81,16 @@ public class {classPath.ClassNameWithoutExt} : TestBase
 
         return badId == "" ? "" : $@"
 
-    [Test]
+    [Fact]
     public async Task get_{entity.Name.ToLower()}_throws_notfound_exception_when_record_does_not_exist()
     {{
         // Arrange
+        var testingServiceScope = new {FileNames.TestingServiceScope()}();
         var badId = {badId};
 
         // Act
         var query = new {featureName}.{queryName}(badId);
-        Func<Task> act = () => SendAsync(query);
+        Func<Task> act = () => testingServiceScope.SendAsync(query);
 
         // Assert
         await act.Should().ThrowAsync<NotFoundException>();

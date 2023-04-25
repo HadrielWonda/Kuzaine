@@ -1,12 +1,10 @@
-﻿using System.IO;
+﻿namespace Kuzaine.Builders.Tests.Utilities;
+
+using System.IO;
 using System.IO.Abstractions;
 using Domain;
 using Helpers;
 using Services;
-
-
-
-namespace Kuzaine.Builders.Tests.Utilities;
 
 public class ApiRouteModifier
 {

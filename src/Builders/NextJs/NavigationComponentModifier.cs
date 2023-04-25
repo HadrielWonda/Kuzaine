@@ -1,11 +1,9 @@
-﻿using System;
+﻿namespace Kuzaine.Builders.NextJs;
+
+using System;
 using System.IO.Abstractions;
 using Kuzaine.Helpers;
 using Kuzaine.Services;
-
-
-
-namespace Kuzaine.Builders.NextJs;
 
 public class NavigationComponentModifier
 {

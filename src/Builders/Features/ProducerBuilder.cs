@@ -1,11 +1,9 @@
-﻿using System;
+﻿namespace Kuzaine.Builders.Features;
+
+using System;
 using Domain;
 using Helpers;
 using Services;
-
-
-
-namespace Kuzaine.Builders.Features;
 
 public class ProducerBuilder
 {

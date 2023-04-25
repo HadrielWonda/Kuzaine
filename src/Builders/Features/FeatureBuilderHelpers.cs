@@ -1,16 +1,12 @@
-using Services;
-
-
-
 namespace Kuzaine.Builders.Features;
+
+using Services;
 
 public class FeatureBuilderHelpers
 {
-    public static void GetPermissionValuesForHandlers(string srcDirectory, string projectBaseName,
-     bool isProtected,string permissionName, 
-     out string heimGuardSetter, out string heimGuardCtor, 
-     out string permissionCheck,out string permissionsUsing, 
-     out string heimGuardField)
+    public static void GetPermissionValuesForHandlers(string srcDirectory, string projectBaseName, bool isProtected,
+        string permissionName, out string heimGuardSetter, out string heimGuardCtor, out string permissionCheck,
+        out string permissionsUsing, out string heimGuardField)
     {
         var permissionsClassPath = ClassPathHelper.PolicyDomainClassPath(srcDirectory, "", projectBaseName);
         heimGuardField = isProtected ? $"{Environment.NewLine}        private readonly IHeimGuardClient _heimGuard;" : null;

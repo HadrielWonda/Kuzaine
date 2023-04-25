@@ -1,9 +1,7 @@
-﻿using Helpers;
+﻿namespace Kuzaine.Builders.Tests.Utilities;
+
+using Helpers;
 using Services;
-
-
-
-namespace Kuzaine.Builders.Tests.Utilities;
 
 public class IntegrationTestBaseBuilder
 {
@@ -14,39 +12,25 @@ public class IntegrationTestBaseBuilder
         _utilities = utilities;
     }
 
-    public void CreateBase(string solutionDirectory, string projectBaseName, bool isProtected)
+    public void CreateBase(string solutionDirectory, string projectBaseName)
     {
         var classPath = ClassPathHelper.IntegrationTestProjectRootClassPath(solutionDirectory, "TestBase.cs", projectBaseName);
-        var fileText = GetBaseText(classPath.ClassNamespace, isProtected);
+        var fileText = GetBaseText(classPath.ClassNamespace);
         _utilities.CreateFile(classPath, fileText);
     }
 
-    public static string GetBaseText(string classNamespace, bool isProtected)
+    public static string GetBaseText(string classNamespace)
     {
-        var testFixtureName = FileNames.GetIntegrationTestFixtureName();
-        
-        var protectedUsings = isProtected ? @$"{Environment.NewLine}using HeimGuard;
-using Moq;" : "";
-        var heimGuardMock = isProtected 
-            ? $@"{Environment.NewLine}        var userPolicyHandler = GetService<IHeimGuardClient>();
-        Mock.Get(userPolicyHandler)
-            .Setup(x => x.HasPermissionAsync(It.IsAny<string>()))
-            .ReturnsAsync(true);{Environment.NewLine}"
-            : null;
-
         return @$"namespace {classNamespace};
 
-using NUnit.Framework;
-using System.Threading.Tasks;
-using AutoBogus;{protectedUsings}
-using static {testFixtureName};
+using AutoBogus;
+using Xunit;
 
-[Parallelizable]
-public class TestBase
+[Collection(nameof(TestFixture))]
+public class TestBase : IDisposable
 {{
-    [SetUp]
-    public Task TestSetUp()
-    {{{heimGuardMock}
+    public TestBase()
+    {{
         AutoFaker.Configure(builder =>
         {{
             // configure global autobogus settings here
@@ -55,8 +39,10 @@ public class TestBase
                 .WithTreeDepth(1)
                 .WithRepeatCount(1);
         }});
-        
-        return Task.CompletedTask;
+    }}
+    
+    public void Dispose()
+    {{
     }}
 }}";
     }

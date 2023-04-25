@@ -1,10 +1,8 @@
-﻿using Kuzaine.Domain.Enums;
+﻿namespace Kuzaine.Builders.NextJs.Domain.Api;
+
+using Kuzaine.Domain.Enums;
 using Kuzaine.Helpers;
 using Kuzaine.Services;
-
-
-
-namespace Kuzaine.Builders.NextJs.Domain.Api;
 
 public class NextJsApiDeleteEntityBuilder
 {
@@ -39,7 +37,7 @@ import {{ useMutation, UseMutationOptions, useQueryClient }} from ""react-query"
 import {{ {keyExportName} }} from ""@/domain/{entityPluralLowercaseFirst}"";
 
 async function delete{entityUpperFirst}(id: string) {{
-  const axios = await clients.{clientName}(); //await funct should be overidden as it's not so clean
+  const axios = await clients.{clientName}();
   return axios.delete(`/{entityPluralLowercase}/${{id}}`).then(() => {{}});
 }}
 
