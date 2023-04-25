@@ -1,3 +1,5 @@
+namespace Kuzaine.Commands;
+
 using System.IO.Abstractions;
 using Builders;
 using Builders.Docker;
@@ -7,10 +9,6 @@ using MediatR;
 using Services;
 using Spectre.Console;
 using Spectre.Console.Cli;
-
-
-
-namespace Kuzaine.Commands;
 
 public class NewDomainCommand : Command<NewDomainCommand.Settings>
 {
@@ -54,7 +52,7 @@ public class NewDomainCommand : Command<NewDomainCommand.Settings>
     {
         var rootDir = _utilities.GetRootDir();
 
-        // TODO make this injectable
+        // TODO make injectable
         _fileParsingHelper.RunInitialTemplateParsingGuards(settings.Filepath);
         var domainProject = _fileParsingHelper.GetTemplateFromFile<DomainProject>(settings.Filepath);
         _consoleWriter.WriteLogMessage($"Your template file was parsed successfully");

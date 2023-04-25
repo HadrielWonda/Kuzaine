@@ -1,11 +1,9 @@
-﻿using System;
+﻿namespace Kuzaine.Helpers;
+
+using System;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using Spectre.Console;
-
-
-
-namespace Kuzaine.Helpers;
 
 public interface IConsoleWriter
 {
@@ -64,7 +62,7 @@ public class ConsoleWriter : IConsoleWriter
         if (starRepo.Key == ConsoleKey.Y)
         {
             WriteHelpText($"{Environment.NewLine}Thanks, it means the world to me! {Emoji.Known.PartyingFace}");
-            var url = "https://github.com/hadrielwonda/Kuzaine";
+            var url = "https://github.com/pdevito3/Kuzaine";
             try
             {
                 Process.Start(url);

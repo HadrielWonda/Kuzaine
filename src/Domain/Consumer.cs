@@ -1,8 +1,6 @@
-﻿using Enums;
+﻿namespace Kuzaine.Domain;
 
-
-
-namespace Kuzaine.Domain;
+using Enums;
 
 public class Consumer
 {

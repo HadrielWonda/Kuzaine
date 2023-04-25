@@ -1,3 +1,5 @@
+namespace Kuzaine.Commands;
+
 using System.IO.Abstractions;
 using Builders;
 using Builders.Bff;
@@ -15,10 +17,6 @@ using Services;
 using Spectre.Console;
 using Spectre.Console.Cli;
 using Validators;
-
-
-
-namespace Kuzaine.Commands;
 
 public class AddMessageCommand : Command<AddMessageCommand.Settings>
 {

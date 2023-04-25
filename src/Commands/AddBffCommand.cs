@@ -1,3 +1,5 @@
+namespace Kuzaine.Commands;
+
 using System.IO.Abstractions;
 using Builders;
 using Builders.Bff;
@@ -14,10 +16,6 @@ using MediatR;
 using Services;
 using Spectre.Console;
 using Spectre.Console.Cli;
-
-
-
-namespace Kuzaine.Commands;
 
 public class AddBffCommand : Command<AddBffCommand.Settings>
 {

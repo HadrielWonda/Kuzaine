@@ -1,10 +1,8 @@
-﻿using System;
+﻿namespace Kuzaine.Domain;
+
+using System;
 using Enums;
 using Exceptions;
-
-
-
-namespace Kuzaine.Domain;
 
 public class Bus
 {

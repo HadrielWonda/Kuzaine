@@ -1,8 +1,6 @@
-﻿using Ardalis.SmartEnum;
+﻿namespace Kuzaine.Domain.Enums;
 
-
-
-namespace Kuzaine.Domain.Enums;
+using Ardalis.SmartEnum;
 
 public abstract class GrantType : SmartEnum<GrantType>
 {

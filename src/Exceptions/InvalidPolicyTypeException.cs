@@ -1,8 +1,6 @@
-﻿using System;
+﻿namespace Kuzaine.Exceptions;
 
-
-
-namespace Kuzaine.Exceptions;
+using System;
 
 [Serializable]
 public class InvalidPolicyTypeException : Exception, IKuzaineException

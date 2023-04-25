@@ -1,9 +1,7 @@
-﻿using System;
+﻿namespace Kuzaine.Exceptions;
+
+using System;
 using System.Runtime.Serialization;
-
-
-
-namespace Kuzaine.Exceptions;
 
 [Serializable]
 internal class SolutiuonNameEntityMatchException : Exception, IKuzaineException

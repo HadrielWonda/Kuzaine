@@ -1,9 +1,7 @@
+namespace Kuzaine.Domain;
+
 using Enums;
 using Helpers;
-
-
-
-namespace Kuzaine.Domain;
 
 public class NextJsEntityProperty
 {

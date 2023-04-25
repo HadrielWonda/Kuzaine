@@ -1,8 +1,6 @@
-﻿using Ardalis.SmartEnum;
+﻿namespace Kuzaine.Domain;
 
-
-
-namespace Kuzaine.Domain;
+using Ardalis.SmartEnum;
 
 public abstract class NamingConventionEnum : SmartEnum<NamingConventionEnum>
 {

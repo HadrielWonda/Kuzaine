@@ -1,3 +1,5 @@
+namespace Kuzaine.Commands;
+
 using System.IO.Abstractions;
 using Builders;
 using Builders.Features;
@@ -9,10 +11,6 @@ using Helpers;
 using Services;
 using Spectre.Console.Cli;
 using Validators;
-
-
-
-namespace Kuzaine.Commands;
 
 public class AddConsumerCommand : Command<AddConsumerCommand.Settings>
 {
@@ -79,7 +77,6 @@ public class AddConsumerCommand : Command<AddConsumerCommand.Settings>
             new MassTransitModifier(_fileSystem).AddConsumerRegistation(srcDirectory, consumer.EndpointRegistrationMethodName, projectBaseName);
 
             new IntegrationTestFixtureModifier(_fileSystem).AddMasstransitConsumer(testDirectory, consumer.ConsumerName, consumer.DomainDirectory, projectBaseName, srcDirectory);
-            new ConsumerTestBuilder(_utilities).CreateTests(solutionDirectory, testDirectory, srcDirectory, consumer, projectBaseName);
         });
     }
 }

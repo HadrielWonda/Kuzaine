@@ -1,10 +1,8 @@
-﻿using System.Collections.Generic;
+﻿namespace Kuzaine.Domain;
+
+using System.Collections.Generic;
 using System.Linq;
 using Helpers;
-
-
-
-namespace Kuzaine.Domain;
 
 /// <summary>
 /// This represents a database entity for your project

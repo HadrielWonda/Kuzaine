@@ -1,3 +1,5 @@
+namespace Kuzaine.Commands;
+
 using System.IO.Abstractions;
 using Builders;
 using Domain;
@@ -6,10 +8,6 @@ using Helpers;
 using Services;
 using Spectre.Console;
 using Spectre.Console.Cli;
-
-
-
-namespace Kuzaine.Commands;
 
 public class RegisterProducerCommand : Command<RegisterProducerCommand.Settings>
 {
@@ -67,7 +65,7 @@ public class RegisterProducerCommand : Command<RegisterProducerCommand.Settings>
     private Producer RunPrompt()
     {
         _console.WriteLine();
-        _console.Write(new Rule("[purple]Register a Producer[/]").RuleStyle("grey").Centered());
+        _console.Write(new Rule("[yellow]Register a Producer[/]").RuleStyle("grey").Centered());
 
         var producer = new Producer();
 
@@ -106,7 +104,7 @@ public class RegisterProducerCommand : Command<RegisterProducerCommand.Settings>
 
         return _console.Prompt(
             new SelectionPrompt<string>()
-                .Title("What [blue]type of exchange[/] do you want to use?")
+                .Title("What [green]type of exchange[/] do you want to use?")
                 .AddChoices(exampleTypes)
         );
     }

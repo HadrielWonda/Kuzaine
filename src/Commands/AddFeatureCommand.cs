@@ -1,3 +1,5 @@
+namespace Kuzaine.Commands;
+
 using System.IO.Abstractions;
 using Domain;
 using Domain.Enums;
@@ -6,10 +8,6 @@ using MediatR;
 using Services;
 using Spectre.Console;
 using Spectre.Console.Cli;
-
-
-
-namespace Kuzaine.Commands;
 
 public class AddFeatureCommand : Command<AddFeatureCommand.Settings>
 {
@@ -296,46 +294,5 @@ public class AddFeatureCommand : Command<AddFeatureCommand.Settings>
                     $"What's the name of the permission for this feature? (Default: [green]Can{featureName}[/])?")
                 .DefaultValue($"Can{featureName}")
                 .HideDefaultValue());
-    }
-
-    private int AskAge(IAnsiConsole console)
-    {
-        console.WriteLine();
-        console.Write(new Rule("[yellow]Integers[/]").RuleStyle("grey").LeftAligned());
-
-        return console.Prompt(
-            new TextPrompt<int>("How [green]old[/] are you?")
-                .PromptStyle("green")
-                .ValidationErrorMessage("[red]That's not a valid age[/]")
-                .Validate(age =>
-                {
-                    return age switch
-                    {
-                        <= 0 => ValidationResult.Error("[red]You must at least be 1 years old[/]"),
-                        >= 123 => ValidationResult.Error("[red]You must be younger than the oldest person alive[/]"),
-                        _ => ValidationResult.Success(),
-                    };
-                }));
-    }
-
-    private string AskPassword(IAnsiConsole console)
-    {
-        console.WriteLine();
-        console.Write(new Rule("[yellow]Secrets[/]").RuleStyle("grey").LeftAligned());
-
-        return console.Prompt(
-            new TextPrompt<string>("Enter [green]password[/]?")
-                .PromptStyle("red")
-                .Secret());
-    }
-
-    private string AskColor(IAnsiConsole console)
-    {
-        console.WriteLine();
-        console.Write(new Rule("[yellow]Optional[/]").RuleStyle("grey").LeftAligned());
-
-        return console.Prompt(
-            new TextPrompt<string>("[grey][[Optional]][/] What is your [green]favorite color[/]?")
-                .AllowEmpty());
     }
 }

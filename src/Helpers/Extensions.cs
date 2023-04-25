@@ -1,4 +1,4 @@
-﻿namespace Craftsman.Helpers;
+﻿namespace Kuzaine.Helpers;
 
 using System;
 

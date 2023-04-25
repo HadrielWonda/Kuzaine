@@ -1,9 +1,7 @@
+namespace Kuzaine.Domain;
+
 using Enums;
 using Exceptions;
-
-
-
-namespace Kuzaine.Domain;
 
 public class BffFeature
 {

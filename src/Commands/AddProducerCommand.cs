@@ -1,3 +1,5 @@
+namespace Kuzaine.Commands;
+
 using System.IO.Abstractions;
 using Builders;
 using Builders.Features;
@@ -9,10 +11,6 @@ using Services;
 using Spectre.Console;
 using Spectre.Console.Cli;
 using Validators;
-
-
-
-namespace Kuzaine.Commands;
 
 public class AddProducerCommand : Command<AddProducerCommand.Settings>
 {
@@ -81,8 +79,6 @@ public class AddProducerCommand : Command<AddProducerCommand.Settings>
             new ProducerBuilder(_utilities).CreateProducerFeature(solutionDirectory, srcDirectory, producer, projectBaseName);
             new ProducerRegistrationBuilder(_utilities).CreateProducerRegistration(solutionDirectory, srcDirectory, producer, projectBaseName);
             new MassTransitModifier(_fileSystem).AddProducerRegistration(srcDirectory, producer.EndpointRegistrationMethodName, projectBaseName);
-
-            new ProducerTestBuilder(_utilities).CreateTests(solutionDirectory, testDirectory, srcDirectory, producer, projectBaseName);
         });
     }
 }

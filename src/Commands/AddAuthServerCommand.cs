@@ -1,3 +1,5 @@
+namespace Kuzaine.Commands;
+
 using System.IO.Abstractions;
 using Builders;
 using Builders.AuthServer;
@@ -8,10 +10,6 @@ using MediatR;
 using Services;
 using Spectre.Console;
 using Spectre.Console.Cli;
-
-
-
-namespace Kuzaine.Commands;
 
 public class AddAuthServerCommand : Command<AddAuthServerCommand.Settings>
 {

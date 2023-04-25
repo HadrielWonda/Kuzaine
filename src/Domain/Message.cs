@@ -1,9 +1,7 @@
-﻿using System.Collections.Generic;
+﻿namespace Kuzaine.Domain;
+
+using System.Collections.Generic;
 using Helpers;
-
-
-
-namespace Kuzaine.Domain;
 
 public class Message
 {

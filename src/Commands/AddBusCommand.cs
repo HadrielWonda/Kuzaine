@@ -1,3 +1,5 @@
+namespace Kuzaine.Commands;
+
 using System.IO.Abstractions;
 using Builders;
 using Builders.Docker;
@@ -8,10 +10,6 @@ using Helpers;
 using Services;
 using Spectre.Console;
 using Spectre.Console.Cli;
-
-
-
-namespace Kuzaine.Commands;
 
 public class AddBusCommand : Command<AddBusCommand.Settings>
 {
@@ -78,8 +76,8 @@ public class AddBusCommand : Command<AddBusCommand.Settings>
     public void AddBus(Bus template, string srcDirectory, string testDirectory, string projectBaseName, string solutionDirectory)
     {
         var massTransitPackages = new Dictionary<string, string>{
-            { "MassTransit", "8.0.7" },
-            { "MassTransit.RabbitMQ", "8.0.7" }
+            { "MassTransit", "8.0.12" },
+            { "MassTransit.RabbitMQ", "8.0.12" }
         };
         var webApiClassPath = ClassPathHelper.WebApiProjectClassPath(srcDirectory, projectBaseName);
         _utilities.AddPackages(webApiClassPath, massTransitPackages);

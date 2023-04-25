@@ -1,9 +1,7 @@
-﻿using System.Collections.Generic;
+﻿namespace Kuzaine.Domain;
+
+using System.Collections.Generic;
 using Humanizer;
-
-
-
-namespace Kuzaine.Domain;
 
 /// <summary>
 /// This is the complete object representation of the API that we will read in from our input file and scaffold out the necessary files

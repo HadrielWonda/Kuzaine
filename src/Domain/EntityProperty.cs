@@ -1,8 +1,6 @@
-﻿using Helpers;
+﻿namespace Kuzaine.Domain;
 
-
-
-namespace Kuzaine.Domain;
+using Helpers;
 
 public class EntityProperty
 {
@@ -106,6 +104,7 @@ public class EntityProperty
                || Type.StartsWith("Hashset<")
                || Type.StartsWith("Dictionary<")
                || Type.StartsWith("IDictionary<")
+               || Type.EndsWith("[]")
                || Type.StartsWith("List<");
     }
 

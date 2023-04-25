@@ -1,10 +1,8 @@
-﻿using System;
+﻿namespace Kuzaine.Domain.Enums;
+
+using System;
 using Ardalis.SmartEnum;
 using Helpers;
-
-
-
-namespace Kuzaine.Domain.Enums;
 
 public abstract class TypescriptPropertyType : SmartEnum<TypescriptPropertyType>
 {
@@ -370,11 +368,11 @@ public abstract class TypescriptPropertyType : SmartEnum<TypescriptPropertyType>
             
         public override string YupValidation(string propName)
             => @$"
-  // TODO add possible validation for {propName}";
+  // TODO possible validation for {propName}";
 
         public override string FormDefaultValue(string propName) 
             => @$"
-      // TODO add possible default for {propName}";
+      // TODO possible default for {propName}";
 
         public override string FormControl(string propName, string label, string validationSchema, FormControlType controlType)
             => $@"
@@ -383,7 +381,7 @@ public abstract class TypescriptPropertyType : SmartEnum<TypescriptPropertyType>
 
         public override string FormSetValue(string propName, string entityName) 
             => @$"
-      // TODO add possibly need setValue for {propName}";
+      // TODO possibly need setValue for {propName}";
 
     }
 }

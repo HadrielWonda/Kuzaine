@@ -1,11 +1,9 @@
-﻿using System;
+﻿namespace Kuzaine.Domain;
+
+using System;
 using Enums;
 using Exceptions;
 using Helpers;
-
-
-
-namespace Kuzaine.Domain;
 
 public class Feature
 {

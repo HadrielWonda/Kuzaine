@@ -1,3 +1,5 @@
+namespace Kuzaine.Commands;
+
 using System.IO.Abstractions;
 using Builders;
 using Domain;
@@ -6,10 +8,6 @@ using MediatR;
 using Services;
 using Spectre.Console;
 using Spectre.Console.Cli;
-
-
-
-namespace Kuzaine.Commands;
 
 public class AddEntityCommand : Command<AddEntityCommand.Settings>
 {
@@ -52,7 +50,7 @@ public class AddEntityCommand : Command<AddEntityCommand.Settings>
         _scaffoldingDirectoryStore.SetBoundedContextDirectoryAndProject(projectName);
         _utilities.IsBoundedContextDirectoryGuard();
 
-        // TODO make this injectable
+        // TODO make injectable
         _fileParsingHelper.RunInitialTemplateParsingGuards(settings.Filepath);
         var template = _fileParsingHelper.GetTemplateFromFile<AddEntityTemplate>(settings.Filepath);
         _consoleWriter.WriteLogMessage($"Your template file was parsed successfully");

@@ -1,8 +1,6 @@
-using Helpers;
-
-
-
 namespace Kuzaine.Domain;
+
+using Helpers;
 
 public class BffTemplate : BffBased
 {

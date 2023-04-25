@@ -1,8 +1,6 @@
-﻿using System.Collections.Generic;
+﻿namespace Kuzaine.Domain;
 
-
-
-namespace Kuzaine.Domain;
+using System.Collections.Generic;
 
 public class ConsumerTemplate
 {

@@ -1,10 +1,8 @@
-﻿using System;
+﻿namespace Kuzaine.Domain.Enums;
+
+using System;
 using Ardalis.SmartEnum;
 using Helpers;
-
-
-
-namespace Kuzaine.Domain.Enums;
 
 public abstract class ValueObjectEnum : SmartEnum<ValueObjectEnum>
 {

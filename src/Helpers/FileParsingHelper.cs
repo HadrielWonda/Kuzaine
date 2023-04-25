@@ -1,4 +1,4 @@
-﻿namespace Craftsman.Helpers;
+﻿namespace Kuzaine.Helpers;
 
 using System.Collections.Generic;
 using System.Data;
@@ -11,7 +11,7 @@ using Newtonsoft.Json;
 using Services;
 using YamlDotNet.Serialization;
 
-public interface IFileParsingHelper : ICraftsmanService
+public interface IFileParsingHelper : IKuzaineService
 {
     bool RunInitialTemplateParsingGuards(string filePath);
     public T ReadJson<T>(string jsonFile);

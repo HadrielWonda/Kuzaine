@@ -1,12 +1,10 @@
+namespace Kuzaine.Domain;
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using Enums;
 using Helpers;
-
-
-
-namespace Kuzaine.Domain;
 
 public class AuthServerTemplate
 {

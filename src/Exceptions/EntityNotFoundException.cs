@@ -1,8 +1,6 @@
-﻿using System;
+﻿namespace Kuzaine.Exceptions;
 
-
-
-namespace Kuzaine.Exceptions;
+using System;
 
 [Serializable]
 class EntityNotFoundException : Exception, IKuzaineException

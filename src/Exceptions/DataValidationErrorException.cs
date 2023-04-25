@@ -1,10 +1,8 @@
-﻿using System;
+﻿namespace Kuzaine.Exceptions;
+
+using System;
 using System.Collections.Generic;
 using FluentValidation.Results;
-
-
-
-namespace Kuzaine.Exceptions;
 
 [Serializable]
 internal class DataValidationErrorException : Exception

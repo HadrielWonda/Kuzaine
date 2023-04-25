@@ -1,8 +1,6 @@
-﻿using Ardalis.SmartEnum;
+﻿namespace Kuzaine.Domain.Enums;
 
-
-
-namespace Kuzaine.Domain.Enums;
+using Ardalis.SmartEnum;
 
 public abstract class ExampleType : SmartEnum<ExampleType>
 {
@@ -15,7 +13,6 @@ public abstract class ExampleType : SmartEnum<ExampleType>
 
     protected ExampleType(string name, int value) : base(name, value)
     {
-        // TODO Occupy this 
     }
 
     private class BasicType : ExampleType
