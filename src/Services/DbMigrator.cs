@@ -1,4 +1,4 @@
-namespace Craftsman.Services;
+namespace Kuzaine.Services;
 
 using Domain;
 using Helpers;
@@ -13,9 +13,9 @@ public class DbMigrator : IDbMigrator
 {
     private readonly IConsoleWriter _consoleWriter;
     private readonly IAnsiConsole _console;
-    private readonly ICraftsmanUtilities _utilities;
+    private readonly IKuzaineUtilities _utilities;
 
-    public DbMigrator(IConsoleWriter consoleWriter, IAnsiConsole console, ICraftsmanUtilities utilities)
+    public DbMigrator(IConsoleWriter consoleWriter, IAnsiConsole console, IKuzaineUtilities utilities)
     {
         _consoleWriter = consoleWriter;
         _console = console;

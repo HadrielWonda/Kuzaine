@@ -1,4 +1,4 @@
-namespace Craftsman.Services;
+namespace Kuzaine.Services;
 
 using Domain;
 using Domain.Enums;
@@ -7,45 +7,27 @@ using Helpers;
 public static class FileNames
 {
     public static string BoundaryServiceInterface(string projectBaseName)
-    {
-        return $"I{projectBaseName}Service";
-    }
-    
-    public static string EntityRepository(string entityName)
-    {
-        return $"{entityName.UppercaseFirstLetter()}Repository";
-    }
-    
-    public static string EntityRepositoryInterface(string entityName)
-    {
-        return $"I{EntityRepository(entityName)}";
-    }
-    
-    public static string GenericRepository()
-    {
-        return $"GenericRepository";
-    }
-    
-    public static string GenericRepositoryInterface()
-    {
-        return $"I{GenericRepository()}";
-    }
-    
-    public static string WebAppServiceConfiguration()
-    {
-        return $"WebAppServiceConfiguration";
-    }
-    
-    public static string GetMassTransitRegistrationName()
-    {
-        return "MassTransitServiceExtension";
-    }
-
-    public static string MessageClassName(string messageName)
-    {
-        return $"{messageName}";
-    }
-
+        => $"I{projectBaseName}ScopedService";
+    public static string EntityRepository(string entityName) 
+        => $"{entityName.UppercaseFirstLetter()}Repository";    
+    public static string EntityRepositoryInterface(string entityName) 
+        => $"I{EntityRepository(entityName)}";    
+    public static string GenericRepository() 
+        => $"GenericRepository";    
+    public static string GenericRepositoryInterface() 
+        => $"I{GenericRepository()}";    
+    public static string WebAppServiceConfiguration() 
+        => $"WebAppServiceConfiguration";    
+    public static string GetMassTransitRegistrationName() 
+        => "MassTransitServiceExtension";
+    public static string MessageClassName(string messageName) 
+        => $"{messageName}";
+    public static string ConnectionStringOptionKey(string projectBaseName) => $"{projectBaseName}Key";
+    public static string TestingServiceScope() => "TestingServiceScope";
+    public static string AuthOptions() => "AuthOptions";
+    public static string RabbitMqOptions() => "RabbitMqOptions";
+    public static string ConnectionStringOptions() => "ConnectionStringOptions";
+    public static string RootConfigurationExtensions() => "RootConfigurationExtensions";
     public static string FakeBuilderName(string entityName) => $"Fake{entityName}Builder";    
     public static string MessageInterfaceName(string messageName) => $"I{messageName}";
     public static string EntityCreatedDomainMessage(string entityName) => $"{entityName}Created";    
@@ -62,7 +44,7 @@ public static class FileNames
     public static string GetSeederName(Entity entity) => $"{entity.Name}Seeder";
     public static string GetInfraRegistrationName() => "InfrastructureServiceExtension";
     public static string GetSwaggerServiceExtensionName() => "SwaggerServiceExtension";
-    public static string GetAppSettingsName(bool asJson = true) => asJson ? $"appsettings.json" : $"appsettings";
+    public static string GetAppSettingsName(bool isDev = false) => isDev ? $"appsettings.Development.json" : $"appsettings.json";
     public static string BffApiKeysFilename(string entityName) => $"{entityName.LowercaseFirstLetter()}.keys";
     public static string BffEntityListRouteComponentName(string entityName) => $"{entityName.UppercaseFirstLetter()}List";
     public static string BffApiKeysExport(string entityName) => $"{entityName.UppercaseFirstLetter()}Keys";
@@ -127,10 +109,8 @@ public static class FileNames
     }
 
     public static string FakerName(string objectToFakeName)
-    {
-        return $"Fake{objectToFakeName}";
-    }
-    
+        => $"Fake{objectToFakeName}";
+
     public static string UnitTestUtilsName()
     {
         return $"UnitTestUtils";
@@ -140,7 +120,6 @@ public static class FileNames
     {
         return dto switch
         {
-            Dto.Manipulation => $"{entityName}ForManipulationDto",
             Dto.Creation => $"{entityName}ForCreationDto",
             Dto.Update => $"{entityName}ForUpdateDto",
             Dto.Read => $"{entityName}Dto",

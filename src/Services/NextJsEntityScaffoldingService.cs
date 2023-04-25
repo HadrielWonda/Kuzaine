@@ -1,4 +1,6 @@
-﻿using System.IO.Abstractions;
+﻿namespace Kuzaine.Services;
+
+using System.IO.Abstractions;
 using Builders.NextJs.Domain;
 using Builders.NextJs.Domain.Api;
 using Builders.NextJs.Domain.Pages;
@@ -8,10 +10,6 @@ using MediatR;
 using Kuzaine.Builders.NextJs;
 using Kuzaine.Builders.NextJs.Domain.Features;
 using Domain.Enums;
-
-
-
-namespace Kuzaine.Services;
 
 public class NextJsEntityScaffoldingService
 {

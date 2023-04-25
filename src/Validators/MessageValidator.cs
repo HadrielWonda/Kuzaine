@@ -1,9 +1,7 @@
-﻿using Domain;
+﻿namespace Kuzaine.Validators;
+
+using Domain;
 using FluentValidation;
-
-
-
-namespace Kuzaine.Validators;
 
 public class MessageValidator : AbstractValidator<Message>
 {

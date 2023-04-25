@@ -1,8 +1,6 @@
-﻿using System.IO;
+﻿namespace Kuzaine.Services;
 
-
-
-namespace Kuzaine.Services;
+using System.IO;
 
 public interface IClassPath
 {

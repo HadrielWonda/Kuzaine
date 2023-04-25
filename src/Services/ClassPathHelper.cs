@@ -1,10 +1,8 @@
-﻿using System.IO;
+﻿namespace Kuzaine.Services;
+
+using System.IO;
 using Domain.Enums;
 using Helpers;
-
-
-
-namespace Kuzaine.Services;
 
 public static class ClassPathHelper
 {
@@ -34,32 +32,37 @@ public static class ClassPathHelper
 
     public static ClassPath UnitTestClassPath(string solutionDirectory, string className, string projectBaseName)
     {
-        return new ClassPath(solutionDirectory, Path.Combine($"{projectBaseName}.{UnitTestProjectSuffix}", "UnitTests"), className);
+        return new ClassPath(solutionDirectory, Path.Combine($"{projectBaseName}.{UnitTestProjectSuffix}"), className);
     }
 
     public static ClassPath UnitTestEntityTestsClassPath(string testDirectory, string className, string entityPlural, string projectBaseName)
     {
-        return new ClassPath(testDirectory, Path.Combine($"{projectBaseName}.{UnitTestProjectSuffix}", "UnitTests", "Domain", entityPlural), className);
+        return new ClassPath(testDirectory, Path.Combine($"{projectBaseName}.{UnitTestProjectSuffix}", "Domain", entityPlural), className);
     }
 
     public static ClassPath UnitTestHelpersClassPath(string testDirectory, string className, string projectBaseName)
     {
-        return new ClassPath(testDirectory, Path.Combine($"{projectBaseName}.{UnitTestProjectSuffix}", "UnitTests", "TestHelpers"), className);
+        return new ClassPath(testDirectory, Path.Combine($"{projectBaseName}.{UnitTestProjectSuffix}", "TestHelpers"), className);
     }
 
     public static ClassPath UnitTestServiceTestsClassPath(string testDirectory, string className, string projectBaseName)
     {
-        return new ClassPath(testDirectory, Path.Combine($"{projectBaseName}.{UnitTestProjectSuffix}", "UnitTests", "ServiceTests"), className);
+        return new ClassPath(testDirectory, Path.Combine($"{projectBaseName}.{UnitTestProjectSuffix}", "ServiceTests"), className);
     }
 
     public static ClassPath UnitTestEntityFeaturesTestsClassPath(string testDirectory, string className, string entityPlural, string projectBaseName)
     {
-        return new ClassPath(testDirectory, Path.Combine($"{projectBaseName}.{UnitTestProjectSuffix}", "UnitTests", "Domain", entityPlural, "Features"), className);
+        return new ClassPath(testDirectory, Path.Combine($"{projectBaseName}.{UnitTestProjectSuffix}", "Domain", entityPlural, "Features"), className);
     }
 
     public static ClassPath UnitTestWrapperTestsClassPath(string solutionDirectory, string className, string projectBaseName)
     {
-        return new ClassPath(solutionDirectory, Path.Combine($"{projectBaseName}.{UnitTestProjectSuffix}", "UnitTests", "Wrappers"), className);
+        return new ClassPath(solutionDirectory, Path.Combine($"{projectBaseName}.{UnitTestProjectSuffix}", "Wrappers"), className);
+    }
+
+    public static ClassPath UnitTestProjectGuardsTestsClassPath(string solutionDirectory, string className, string projectBaseName)
+    {
+        return new ClassPath(solutionDirectory, Path.Combine($"{projectBaseName}.{UnitTestProjectSuffix}", "ProjectGuards"), className);
     }
 
     public static ClassPath WebApiHostExtensionsClassPath(string projectDirectory, string className, string projectBaseName)
@@ -238,6 +241,11 @@ public static class ClassPathHelper
         return new ClassPath(solutionDirectory, Path.Combine($"{projectBaseName}.{SharedTestProjectSuffix}", "Fakes", entityName), className);
     }
 
+    public static ClassPath SharedTestUtilitiesClassPath(string solutionDirectory, string className, string projectBaseName)
+    {
+        return new ClassPath(solutionDirectory, Path.Combine($"{projectBaseName}.{SharedTestProjectSuffix}", "Utilities"), className);
+    }
+
     public static ClassPath EntityClassPath(string srcDirectory, string className, string entityPlural, string projectBaseName)
     {
         var withSuffix = ApiProjectSuffix.Length > 0 ? $".{ApiProjectSuffix}" : "";
@@ -270,6 +278,12 @@ public static class ClassPathHelper
     {
         var dtoName = FileNames.GetDtoName(valueObjectEnum.Name, dto);
         return new ClassPath(srcDirectory, Path.Combine($"{projectBaseName}", "Domain", valueObjectEnum.Plural(), "Dtos"), $"{dtoName}.cs");
+    }
+
+    public static ClassPath EntityModelClassPath(string srcDirectory, string entityName, string entityPlural, EntityModel entityModel, string projectBaseName)
+    {
+        var modelName = entityModel?.GetClassName(entityName);
+        return new ClassPath(srcDirectory, Path.Combine($"{projectBaseName}", "Domain", entityPlural, "Models"), $"{modelName}.cs");
     }
 
     public static ClassPath WebApiValueObjectMappingsClassPath(string srcDirectory, ValueObjectEnum valueObjectEnum, string projectBaseName)
@@ -326,6 +340,11 @@ public static class ClassPathHelper
     public static ClassPath WebApiResourcesClassPath(string srcDirectory, string className, string projectBaseName)
     {
         return new ClassPath(srcDirectory, Path.Combine($"{projectBaseName}", "Resources"), className);
+    }
+
+    public static ClassPath WebApiConfigurationsClassPath(string srcDirectory, string className, string projectBaseName)
+    {
+        return new ClassPath(srcDirectory, Path.Combine($"{projectBaseName}", "Configurations"), className);
     }
 
     public static ClassPath WebApiServicesClassPath(string srcDirectory, string className, string projectBaseName)

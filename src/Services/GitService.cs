@@ -1,4 +1,4 @@
-namespace Craftsman.Services;
+namespace Kuzaine.Services;
 
 using System.IO.Abstractions;
 using Builders;
@@ -30,7 +30,7 @@ public class GitService : IGitService
 
         var author = useSystemGitUser
             ? repo.Config.BuildSignature(DateTimeOffset.Now)
-            : new Signature("Craftsman", "craftsman", DateTimeOffset.Now);
+            : new Signature("Kuzaine", "Kuzaine", DateTimeOffset.Now);
         repo.Commit("Initial Commit", author, author);
     }
 }

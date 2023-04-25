@@ -1,6 +1,9 @@
+namespace Kuzaine.Services;
+
 using System.IO.Abstractions;
 using Builders;
 using Builders.Auth;
+using Builders.Configurations;
 using Builders.Docker;
 using Builders.Endpoints;
 using Builders.Tests.Fakes;
@@ -14,10 +17,6 @@ using FluentAssertions.Common;
 using Helpers;
 using MediatR;
 using Spectre.Console;
-
-
-
-namespace Kuzaine.Services;
 
 public class ApiScaffoldingService
 {
@@ -69,7 +68,7 @@ public class ApiScaffoldingService
                         template.DockerConfig.OTelAgentPort);
 
                 // add all files based on the given template config
-                ctx.Status($"[bold purple]Scaffolding Files for {projectName} [/]");
+                ctx.Status($"[bold blue]Scaffolding Files for {projectName} [/]");
                 RunTemplateBuilders(_scaffoldingDirectoryStore.BoundedContextDirectory, _scaffoldingDirectoryStore.SrcDirectory, _scaffoldingDirectoryStore.TestDirectory, template);
                 _consoleWriter.WriteLogMessage($"File scaffolding for {template.ProjectName} was successful");
             });
@@ -144,7 +143,8 @@ public class ApiScaffoldingService
 
         // config
         new AppSettingsBuilder(_utilities).CreateWebApiAppSettings(srcDirectory, template.DbContext.DatabaseName, projectBaseName);
-        new WebApiLaunchSettingsModifier(_fileSystem).AddProfile(srcDirectory, template.Environment, template.Port, template.DockerConfig, projectBaseName);
+        new AppSettingsDevelopmentBuilder(_utilities).CreateWebApiAppSettings(srcDirectory, template.Environment, template.DockerConfig, projectBaseName);
+        new WebApiLaunchSettingsModifier(_fileSystem).AddProfile(srcDirectory, template.Environment, template.Port, projectBaseName);
         
         // unit tests, test utils, and one offs
         new PagedListTestBuilder(_utilities).CreateTests(srcDirectory, testDirectory, projectBaseName);
@@ -154,9 +154,9 @@ public class ApiScaffoldingService
             template.DbContext.ContextName,
             template.DbContext.ProviderEnum,
             template.AddJwtAuthentication);
-        new IntegrationTestBaseBuilder(_utilities).CreateBase(testDirectory, projectBaseName, template.AddJwtAuthentication);
-        new WebAppFactoryBuilder(_utilities).CreateWebAppFactory(testDirectory, projectBaseName, template.AddJwtAuthentication);
-        new FunctionalFixtureBuilder(_utilities).CreateFixture(testDirectory, projectBaseName, template.DbContext.ContextName, template.DbContext.ProviderEnum);
+        new IntegrationTestBaseBuilder(_utilities).CreateBase(testDirectory, projectBaseName);
+        new IntegrationTestServiceScopeBuilder(_utilities).CreateBase(testDirectory, projectBaseName, template.DbContext.ContextName, template.AddJwtAuthentication);
+        new WebAppFactoryBuilder(_utilities).CreateWebAppFactory(testDirectory, projectBaseName, template.DbContext.ProviderEnum, template.AddJwtAuthentication);
         new FunctionalTestBaseBuilder(_utilities).CreateBase(srcDirectory, testDirectory, projectBaseName, template.DbContext.ContextName, template.AddJwtAuthentication);
         new HealthTestBuilder(_utilities).CreateTests(testDirectory, projectBaseName);
         new HttpClientExtensionsBuilder(_utilities).Create(testDirectory, projectBaseName);
@@ -173,16 +173,21 @@ public class ApiScaffoldingService
             ValueObjectEnum.Email.Name,
             ValueObjectEnum.Email.Plural(),
             projectBaseName);
+        new AllEndpointsProtectedUnitTestBuilder(_utilities).CreateTests(testDirectory, projectBaseName);
         
         if(template.AddJwtAuthentication)
             new UserPolicyHandlerUnitTests(_utilities).CreateTests(testDirectory, srcDirectory, projectBaseName);
 
         //services
         _mediator.Send(new UnitTestUtilsBuilder.Command());
+        _mediator.Send(new SharedTestUtilsBuilder.Command());
         _mediator.Send(new UnitOfWorkBuilder.UnitOfWorkBuilderCommand(template.DbContext.ContextName));
         _mediator.Send(new IBoundaryServiceInterfaceBuilder.IBoundaryServiceInterfaceBuilderCommand());
         _mediator.Send(new GenericRepositoryBuilder.GenericRepositoryBuilderCommand(template.DbContext.ContextName));
-        _mediator.Send(new EnvironmentServiceBuilder.Command());
+        new AuthConfigurationsBuilder(_utilities).CreateConfig(srcDirectory, projectBaseName);
+        new RabbitMqConfigurationsBuilder(_utilities).CreateConfig(srcDirectory, projectBaseName);
+        new ConnectionStringConfigurationsBuilder(_utilities).CreateConfig(srcDirectory, projectBaseName);
+        new RootConfigurationsExtensionBuilder(_utilities).CreateConfig(srcDirectory, projectBaseName);
 
         new CurrentUserServiceBuilder(_utilities).GetCurrentUserService(srcDirectory, projectBaseName);
         new DateTimeProviderBuilder(_utilities).GetCurrentUserService(srcDirectory, projectBaseName);
@@ -219,7 +224,6 @@ public class ApiScaffoldingService
         string projectBaseName,
         DockerConfig dockerConfig)
     {
-        new AppSettingsBuilder(_utilities).CreateWebApiAppSettings(srcDirectory, dbName, projectBaseName);
-        new WebApiLaunchSettingsModifier(_fileSystem).AddProfile(srcDirectory, environment, port, dockerConfig, projectBaseName);
+        new WebApiLaunchSettingsModifier(_fileSystem).AddProfile(srcDirectory, environment, port, projectBaseName);
     }
 }

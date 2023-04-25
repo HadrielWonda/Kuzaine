@@ -1,7 +1,7 @@
+namespace Kuzaine;
+
 using Microsoft.Extensions.DependencyInjection;
 using Spectre.Console.Cli;
-
-namespace Kuzaine;
 
 public sealed class TypeRegistrar : ITypeRegistrar
 {
