@@ -32,7 +32,7 @@ public class EntityModelBuilder
     {
         var classPath = ClassPathHelper.EntityModelClassPath(srcDirectory, entity.Name, entity.Plural, model, projectBaseName);
         var fileText = GetEntityModelFileText(classPath, entity, model);
-        _utilities.CreateFile(classPath, fileText);
+        _utilities.CreateFile(classPath, fileText); 
     }
 
     public static string GetEntityModelFileText(ClassPath classPath, Entity entity, EntityModel model)
